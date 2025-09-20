@@ -20,14 +20,12 @@ import Testimonial from "../home/Testimonial";
 import FlippingCard from "../home/FlippingCard";
 import DelanShiny from "../home/DelanShiny";
 
-// ✅ point to the component location
+// Preloader overlay
 import Preloader from "@/components/Preloader";
 
 export default function Home() {
-  const [showPreloader, setShowPreloader] = useState(() => {
-    const seen = localStorage.getItem("homeIntroSeen");
-    return !seen;
-  });
+  // 👇 Always show on each load
+  const [showPreloader, setShowPreloader] = useState(true);
 
   useEffect(() => {
     if (showPreloader) document.body.classList.add("overflow-hidden");
@@ -36,7 +34,7 @@ export default function Home() {
   }, [showPreloader]);
 
   const handleEnd = () => {
-    localStorage.setItem("homeIntroSeen", "1");
+    // Do NOT write to localStorage — ensures it shows every reload
     setShowPreloader(false);
   };
 
@@ -46,7 +44,7 @@ export default function Home() {
         <Preloader onVideoEnd={handleEnd} hintText="Click To Start" />
       )}
 
-      {/* Your homepage content (will sit behind the fixed preloader) */}
+      {/* Page content (behind the fixed preloader) */}
       <HeroSection />
       <CategoriesSection />
       <InteractiveModelSection />

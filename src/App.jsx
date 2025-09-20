@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from '@/components/pages/Home'
 import Footer from "./components/Footer";
-import Collection from "./components/pages/collection";
+import Collection from "./components/pages/Collection";
 import Marquee from "./components/Marquee";
 // import Product from "./components/pages/Product";
 

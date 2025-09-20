@@ -10,7 +10,7 @@ import cnbc from "@/assets/logos/cnbc.svg";
 
 // Outlined star (gold stroke, no fill)
 const OutlineStar = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <svg width={size} height={size} viewBox="0 0 24 24" fill='none' aria-hidden="true">
     <path
       d="M12 3.5l2.92 5.92 6.53.95-4.72 4.6 1.11 6.47L12 18.9 6.16 21.44l1.11-6.47-4.72-4.6 6.53-.95L12 3.5z"
       stroke="#F5C543"

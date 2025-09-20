@@ -1,5 +1,5 @@
 // src/components/Navbar.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   NavigationMenu,
@@ -11,10 +11,12 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Search, ShoppingCart, Truck, Menu as MenuIcon, ChevronRight } from "lucide-react";
 import logo from "@/assets/images/Delan-logo.svg";
 
-// bring your query + client from your own files
 import { GET_MENU } from "@/lib/queries";
 import { shopify } from "@/lib/shopify";
+import CartSidebar from "@/components/CartSidebar";
+import SearchSidebar from "./SearchSidebar";
 
+// ---------- utils ----------
 const toRelative = (url) => {
   if (!url) return "#";
   if (url.startsWith("/")) return url;
@@ -26,12 +28,47 @@ const toRelative = (url) => {
   }
 };
 
-const PRIMARY_TEXT = "text-primary text-[#4a1f33]"; // uses tailwind 'primary' if defined, plus fallback
+const PRIMARY_TEXT = "text-primary text-[#4a1f33]";
+
+const CART_ID_KEY = "shopifyCartId";
+const CART_MIN_QUERY = /* GraphQL */ `
+  query CartMin($cartId: ID!) {
+    cart(id: $cartId) {
+      id
+      totalQuantity
+    }
+  }
+`;
+
+// Unwraps either a fetch Response or an object with {data}
+async function unwrapAsync(resp) {
+  let r = resp;
+  if (r && typeof r.json === "function") {
+    try {
+      r = await r.json();
+    } catch {}
+  }
+  const body = r?.data ?? r;
+  if (Array.isArray(r?.errors) && r.errors.length) {
+    throw new Error(r.errors.map((e) => e.message).join("; "));
+  }
+  return body;
+}
+
+function getStoredCartId() {
+  try {
+    return localStorage.getItem(CART_ID_KEY) || null;
+  } catch {
+    return null;
+  }
+}
 
 export default function Navbar() {
   const location = useLocation();
   const [items, setItems] = useState([]);
-  const [cartCount] = useState(0);
+  const [cartQty, setCartQty] = useState(0);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   // hide on scroll down, show on scroll up
   const [showHeader, setShowHeader] = useState(true);
@@ -51,13 +88,81 @@ export default function Navbar() {
   useEffect(() => {
     (async () => {
       try {
-        const d = await shopify(GET_MENU, { handle: "main-menu" });
+        const raw = await shopify(GET_MENU, { handle: "main-menu" });
+        const d = await unwrapAsync(raw);
         setItems(d?.menu?.items || []);
       } catch (e) {
         console.error("Menu load failed:", e);
         setItems([]);
       }
     })();
+  }, []);
+
+  // load cart qty
+  const refreshCartQty = useCallback(async () => {
+    try {
+      const id = getStoredCartId();
+      if (!id) return setCartQty(0);
+      const raw = await shopify(CART_MIN_QUERY, { cartId: id });
+      const d = await unwrapAsync(raw);
+      setCartQty(d?.cart?.totalQuantity || 0);
+    } catch (e) {
+      console.warn("Cart qty refresh failed:", e);
+      setCartQty(0);
+    }
+  }, []);
+
+  // live updates from CartSidebar via window event
+  useEffect(() => {
+    const onCartUpdated = (e) => {
+      const q = e?.detail?.totalQuantity;
+      if (typeof q === "number") setCartQty(q);
+      else refreshCartQty();
+    };
+    window.addEventListener("cart:updated", onCartUpdated);
+    return () => window.removeEventListener("cart:updated", onCartUpdated);
+  }, [refreshCartQty]);
+
+  // initial load + cross-tab sync
+  useEffect(() => {
+    refreshCartQty();
+    const onStorage = (e) => {
+      if (e.key === CART_ID_KEY) refreshCartQty();
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, [refreshCartQty]);
+
+  const handleCartOpenChange = useCallback(
+    (open) => {
+      setCartOpen(open);
+      if (!open) setTimeout(refreshCartQty, 250);
+    },
+    [refreshCartQty]
+  );
+
+  const handleSearchOpenChange = useCallback((open) => {
+    setSearchOpen(open);
+  }, []);
+
+  // "/" keyboard shortcut to open search (unless typing in an input/textarea)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (
+        e.key === "/" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !(e.target instanceof HTMLInputElement) &&
+        !(e.target instanceof HTMLTextAreaElement) &&
+        !(e.target?.isContentEditable)
+      ) {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   const main = useMemo(() => items ?? [], [items]);
@@ -68,10 +173,10 @@ export default function Navbar() {
         showHeader ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      {/* ===== Top bar ===== */}
-      <div className="flex items-center justify-between border-b border-[#eee5ea] px-4 md:px-10 py-3">
+      {/* Top bar (grid → centered logo) */}
+      <div className="grid grid-cols-3 items-center border-b border-[#eee5ea] px-4 md:px-10 py-3">
         {/* Left */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-self-start">
           <Sheet>
             <SheetTrigger className="md:hidden inline-flex items-center justify-center rounded p-2 hover:bg-black/5">
               <MenuIcon className="h-5 w-5" />
@@ -91,42 +196,53 @@ export default function Navbar() {
         </div>
 
         {/* Center brand */}
-        <div className="text-center">
+        <div className="text-center justify-self-center">
           <Link to="/" className="block">
-            {/* Tailwind doesn't have h-17; use a custom value */}
-            <img src={logo} alt="DELAN" className="mx-auto h-[68px] w-auto" />
+            <img src={logo} alt="DELAN" className="mx-auto h-[56px] sm:h-[64px] md:h-[68px] w-auto" />
           </Link>
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-5">
-          <Link to="/search" className="inline-flex items-center hover:opacity-80" aria-label="Search">
+        <div className="flex items-center gap-5 justify-self-end">
+          {/* Open search sidebar (was a Link before) */}
+          <button
+            type="button"
+            onClick={() => setSearchOpen(true)}
+            className="inline-flex items-center hover:opacity-80"
+            aria-label="Search"
+            title="Search ( / )"
+          >
             <Search className="h-5 w-5" />
-          </Link>
+          </button>
 
           <Link to="/account/login" className="hidden sm:inline text-sm hover:opacity-80 font-secondary">
             Login <span className="mx-1 opacity-60">/</span> Sign Up
           </Link>
 
-          <Link to="/cart" className="relative inline-flex items-center hover:opacity-80" aria-label="Cart">
+          {/* Open cart sidebar */}
+          <button
+            type="button"
+            onClick={() => setCartOpen(true)}
+            className="relative inline-flex items-center hover:opacity-80"
+            aria-label="Open cart"
+          >
             <ShoppingCart className="h-5 w-5" />
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 grid h-4 w-4 place-items-center rounded-full bg-[#4a1f33] text-[10px] text-white">
-                {cartCount}
+            {cartQty > 0 && (
+              <span className="absolute -top-2 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-[#4a1f33] px-1 text-[10px] text-white">
+                {cartQty}
               </span>
             )}
-          </Link>
+          </button>
         </div>
       </div>
 
-      {/* ===== Bottom nav (desktop) ===== */}
+      {/* Bottom nav */}
       <div className="hidden md:flex justify-center border-b border-[#eee5ea]">
         <NavigationMenu>
           <NavigationMenuList className="gap-1">
             {main.map((m) => {
               const hasChildren = (m.items?.length ?? 0) > 0;
 
-              // — no children: simple link —
               if (!hasChildren) {
                 return (
                   <NavigationMenuItem key={m.title} className="relative">
@@ -142,19 +258,13 @@ export default function Navbar() {
                 );
               }
 
-              // — with children: Popover anchored to this item —
               return (
                 <NavigationMenuItem key={m.title} className="relative">
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button
-                        className="group font-secondary px-4 py-4 text-md uppercase rounded bg-transparent hover:bg-black/5 inline-flex items-center text-primary"
-                      >
+                      <button className="group font-secondary px-4 py-4 text-md uppercase rounded bg-transparent hover:bg-black/5 inline-flex items-center text-primary">
                         {m.title}
-                        <span
-                          className="ml-1 text-[10px] transition-transform group-data-[state=open]:rotate-180"
-                          aria-hidden
-                        >
+                        <span className="ml-1 text-[10px] transition-transform group-data-[state=open]:rotate-180" aria-hidden>
                           ▾
                         </span>
                       </button>
@@ -187,6 +297,10 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
       </div>
+
+      {/* Sidebars */}
+      <SearchSidebar open={searchOpen} onOpenChange={handleSearchOpenChange} />
+      <CartSidebar open={cartOpen} onOpenChange={handleCartOpenChange} />
     </header>
   );
 }

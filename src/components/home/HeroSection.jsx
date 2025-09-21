@@ -1,9 +1,6 @@
 // src/components/HeroSlider.jsx
 import React from "react";
 
-// Posters (optional but recommended for quick first paint)
-import heroPoster from "@/assets/images/hero1.png";
-
 // Videos
 import heroMobile from "@/assets/videos/hero.mp4";
 import heroDesktop from "@/assets/videos/hero-laptop.mp4";
@@ -15,10 +12,8 @@ export default function HeroSlider() {
       aria-label="Hero slider"
       aria-roledescription="carousel"
       aria-live="polite"
-      className="
-        relative w-full overflow-hidden bg-neutral-100
-        h-[80vh] md:h-[70vh] lg:h-[90vh]
-      "
+      className="relative w-full overflow-hidden bg-neutral-100
+        h-[80vh] md:h-[70vh] lg:h-[90vh]"
     >
       {/* Mobile (≤ md) */}
       <video
@@ -28,8 +23,8 @@ export default function HeroSlider() {
         muted
         autoPlay
         loop
-        preload="metadata"
-        poster={heroPoster}
+        preload="auto"
+        loading="lazy"
         aria-label="Hero mobile video"
       >
         <source src={heroMobile} type="video/mp4" />
@@ -43,8 +38,8 @@ export default function HeroSlider() {
         muted
         autoPlay
         loop
-        preload="metadata"
-        poster={heroPoster}
+        preload="auto"
+        loading="lazy"
         aria-label="Hero desktop video"
       >
         <source src={heroDesktop} type="video/mp4" />

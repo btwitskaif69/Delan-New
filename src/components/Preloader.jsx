@@ -1,7 +1,6 @@
-// src/components/Preloader.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import preloader from "@/assets/videos/intro_viddd.mp4"
+import preloader from "@/assets/videos/intro_viddd.mp4";
 
 export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
   const videoRef = useRef(null);
@@ -9,6 +8,7 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isCoarse, setIsCoarse] = useState(false); // hide hint on touch devices
 
+  // Preloading video to prioritize it
   useEffect(() => {
     try {
       const mq = window.matchMedia("(hover: none) and (pointer: coarse)");
@@ -17,10 +17,11 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
       mq.addEventListener?.("change", update);
       return () => mq.removeEventListener?.("change", update);
     } catch {
-      // if matchMedia not available, do nothing
+      // If matchMedia not available, do nothing
     }
   }, []);
 
+  // Auto-start the video on click
   const handleScreenClick = () => {
     if (videoRef.current && !hasStarted) {
       videoRef.current
@@ -30,10 +31,12 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
     }
   };
 
+  // Track mouse movement for hint positioning
   const handleMouseMove = (e) => {
     setMousePos({ x: e.clientX, y: e.clientY });
   };
 
+  // Handle skipping the video
   const handleSkip = (e) => {
     e.stopPropagation();
     if (videoRef.current) videoRef.current.pause();
@@ -51,6 +54,7 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
       <video
         ref={videoRef}
         src={preloader}
+        preload="auto" // Preload the video for faster loading
         playsInline
         muted={false}
         controls={false}

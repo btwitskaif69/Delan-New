@@ -137,7 +137,7 @@ export default function MaxiMidi() {
   /* Loading / Error states */
   if (loading) {
     return (
-      <section id="trousers-section" className="bg-white px-[5%] py-10 text-center">
+      <section id="maxi-midi-dress-section" className="bg-white px-[5%] py-10 text-center">
         <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
           Maxi & Midi Dresses
         </h2>
@@ -164,7 +164,7 @@ export default function MaxiMidi() {
 
   if (error) {
     return (
-      <section id="short-dresses-section" className="bg-white px-[5%] py-12 text-center">
+      <section id="maxi-midi-dress-section" className="bg-white px-[5%] py-12 text-center">
         <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
           Maxi & Midi Dresses
         </h2>
@@ -177,7 +177,7 @@ export default function MaxiMidi() {
 
   if (!data?.collection || productsToShow.length === 0) {
     return (
-      <section id="short-dresses-section" className="bg-white px-[5%] py-12 text-center">
+      <section id="maxi-midi-dress-section" className="bg-white px-[5%] py-12 text-center">
         <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[#642c44] mb-4">
           Maxi & Midi Dresses
         </h2>
@@ -189,7 +189,7 @@ export default function MaxiMidi() {
   }
 
   return (
-    <section id="short-dresses-section" className="bg-white px-[5%] py-12 text-center">
+    <section id="maxi-midi-dress-section" className="bg-white px-[5%] py-12 text-center">
       <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
         Maxi & Midi Dresses
       </h2>

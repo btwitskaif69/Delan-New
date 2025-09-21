@@ -12,7 +12,6 @@ import Marquee from "./components/Marquee";
 const Account = () => <div className="p-6">Account</div>;
 const Cart = () => <div className="p-6">Cart</div>;
 const TrackOrder = () => <div className="p-6">Track Order</div>;
-const Search = () => <div className="p-6">Search</div>;
 const NotFound = () => <div className="p-6">404 – Not found</div>;
 
 export default function App() {
@@ -29,7 +28,6 @@ export default function App() {
         {/* Shopify-style routes you’ll likely need */}
         <Route path="/collections/:handle" element={<Collection />} />
         {/* <Route path="/products/:handle" element={<Product />} /> */}
-        <Route path="/search" element={<Search />} />
 
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

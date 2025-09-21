@@ -125,7 +125,7 @@ export default function UspShowcase() {
       className="
         bg-white font-[var(--font-primary)]
         flex flex-col md:flex-row
-        min-h-[220vh] md:min-h-[350vh]
+        min-h-[100vh] md:min-h-[350vh]
       "
     >
       {/* Images panel */}

@@ -31,19 +31,23 @@ function UspItem({ usp, index, scrollYProgress }) {
   const y = useTransform(scrollYProgress, [start, end], [20, 0]);
 
   return (
-    <motion.div
-      style={{ top: usp.position.top, left: usp.position.left, opacity, y }}
-      className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 z-20"
-    >
-      {/* fixed invalid class: `bg-transparent!` -> `bg-transparent` */}
-      <Card className="bg-transparent border-0 shadow-none">
-        <CardContent className="px-5 py-3">
-          <p className="font-secondary text-center text-sm md:text-base text-primary font-semibold">
-            {usp.text}
-          </p>
-        </CardContent>
-      </Card>
-    </motion.div>
+<motion.div
+  style={{ top: usp.position.top, left: usp.position.left, opacity, y }}
+  className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 z-20"
+>
+  <Card
+    className="border-0 shadow-none 
+               bg-white/10 backdrop-blur-xs 
+               sm:bg-transparent sm:backdrop-blur-none py-0!"
+  >
+    <CardContent className="px-5 py-3">
+      <p className="font-secondary text-center text-sm md:text-base text-primary font-semibold">
+        {usp.text}
+      </p>
+    </CardContent>
+  </Card>
+</motion.div>
+
   );
 }
 
@@ -86,9 +90,9 @@ export default function InteractiveModelSection({ nextSectionRef }) {
           className="pointer-events-none absolute left-1/2 top-[5%] z-30 w-[92%] max-w-4xl -translate-x-1/2 text-center text-primary"
         >
           <h2 className="font-primary cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl font-bold">
-            Why Delan Feels Like You:
+            Why Delan Feels Like You
           </h2>
-          <p className="font-secondary mt-1 text-lg md:text-xl">
+          <p className="font-secondary mt-1 text-md md:text-xl">
             Because fashion should vibe with your story.
           </p>
         </motion.div>

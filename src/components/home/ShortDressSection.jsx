@@ -137,7 +137,7 @@ export default function ShortDressSection() {
   /* Loading / Error states */
   if (loading) {
     return (
-      <section id="trousers-section" className="bg-white px-[5%] py-10 text-center">
+      <section id="short-dresses-section" className="bg-white px-[5%] py-10 text-center">
         <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
           Short Dresses
         </h2>

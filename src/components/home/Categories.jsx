@@ -9,7 +9,31 @@ import TABLE from "@/assets/images/666.png";
 import EVENT from "@/assets/images/111.png";
 import FESTIVE from "@/assets/images/122.png";
 
-const BRAND = "var(--brand-642, #642c44)";
+// A reusable component for displaying the animated category image
+const CategoryImage = ({ category, motionKey, ...props }) => (
+  <Card className="border-0 shadow-none">
+    <CardContent className="p-0">
+      <AspectRatio ratio={4 / 5} className="overflow-hidden rounded-2xl">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={motionKey}
+            src={category.img}
+            alt={category.name}
+            className="h-full w-full select-none object-contain"
+            draggable="false"
+            loading="lazy"
+            decoding="async"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            {...props}
+          />
+        </AnimatePresence>
+      </AspectRatio>
+    </CardContent>
+  </Card>
+);
 
 export default function Categories() {
   const categories = useMemo(
@@ -28,14 +52,13 @@ export default function Categories() {
 
   return (
     <section id="categories-section" className="bg-white px-[5%] py-12">
-      {/* Heading */}
       <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl text-center mb-8">
         Our Curated Collection
       </h2>
 
-      {/* Layout: desktop → 3 columns / mobile → stacked with list above image */}
       <div className="mx-auto grid max-w-[1200px] items-start gap-10 lg:grid-cols-[minmax(320px,1fr)_minmax(420px,560px)_minmax(220px,1fr)]">
-        {/* LEFT: Vertical list (desktop). On mobile we render a *separate* centered list above image */}
+        
+        {/* LEFT: Desktop Navigation */}
         <div className="hidden lg:block self-center">
           <nav aria-label="Curated categories" className="flex flex-col gap-6">
             {categories.map((cat, idx) => {
@@ -51,7 +74,6 @@ export default function Categories() {
                   <span
                     className={[
                       "font-primary uppercase",
-                      // big serif like screenshot
                       "text-[clamp(1.6rem,2.4vw,1rem)] leading-tight",
                       "tracking-[0.06em]",
                       isActive
@@ -67,93 +89,63 @@ export default function Categories() {
           </nav>
         </div>
 
-        {/* CENTER: Main preview with two blurred previews (desktop only) */}
-        <div className="relative">
-          <Card className="border-0 shadow-none">
-            <CardContent className="p-0">
-              <div className="relative">
-                {/* Main image */}
-                <AspectRatio ratio={4 / 5} className="overflow-hidden rounded-2xl">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={categories[activeIndex].name}
-                      src={categories[activeIndex].img}
-                      alt={categories[activeIndex].name}
-                      className="h-full w-full select-none object-contain lg:object-contain"
-                      draggable="false"
-                      loading="lazy"
-                      decoding="async"
-                      initial={{ opacity: 0, scale: 0.94, y: 32 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 1.04, y: -32 }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
-                    />
-                  </AnimatePresence>
-                </AspectRatio>
-
-                {/* Blurred previews (desktop only, sit to the right like your mock) */}
-                <div className="pointer-events-none absolute inset-0 hidden lg:block">
-                  {/* next */}
-                  <div className="absolute right-[-12%] top-[22%] h-[38%] w-[26%] overflow-hidden rounded-xl opacity-70 blur-[2px]">
-                    <AnimatePresence mode="wait">
-                      <motion.img
-                        key={categories[nextIndex].name + "-next"}
-                        src={categories[nextIndex].img}
-                        alt=""
-                        className="h-full w-full object-contain"
-                        initial={{ opacity: 0, x: 16 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -16 }}
-                        transition={{ duration: 0.45 }}
-                      />
-                    </AnimatePresence>
-                  </div>
-
-                  {/* next-next */}
-                  <div className="absolute right-[-20%] bottom-[6%] h-[40%] w-[28%] overflow-hidden rounded-xl opacity-60 blur-[4px]">
-                    <AnimatePresence mode="wait">
-                      <motion.img
-                        key={categories[nextNextIndex].name + "-next-next"}
-                        src={categories[nextNextIndex].img}
-                        alt=""
-                        className="h-full w-full object-contain"
-                        initial={{ opacity: 0, x: 16 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -16 }}
-                        transition={{ duration: 0.45, delay: 0.08 }}
-                      />
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* CENTER: Desktop Image Preview */}
+        <div className="relative hidden lg:block">
+          <CategoryImage
+            category={categories[activeIndex]}
+            motionKey={categories[activeIndex].name}
+          />
+          {/* Blurred previews */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute right-[-12%] top-[22%] h-[38%] w-[26%] overflow-hidden rounded-xl opacity-70 blur-[2px]">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={categories[nextIndex].name + "-next"}
+                  src={categories[nextIndex].img}
+                  alt=""
+                  className="h-full w-full object-contain"
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -16 }}
+                  transition={{ duration: 0.45 }}
+                />
+              </AnimatePresence>
+            </div>
+            <div className="absolute right-[-20%] bottom-[6%] h-[40%] w-[28%] overflow-hidden rounded-xl opacity-60 blur-[4px]">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={categories[nextNextIndex].name + "-next-next"}
+                  src={categories[nextNextIndex].img}
+                  alt=""
+                  className="h-full w-full object-contain"
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -16 }}
+                  transition={{ duration: 0.45, delay: 0.08 }}
+                />
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
-
-        {/* RIGHT: spacer to keep center perfectly centered on desktop */}
+        
+        {/* RIGHT: Desktop Spacer */}
         <div className="hidden lg:block" aria-hidden="true" />
 
-        {/* MOBILE/TABLET LIST — centered big serif, stacked like your phone screenshot */}
-        <div className="lg:hidden col-span-full">
-          <nav
-            aria-label="Curated categories (mobile)"
-            className="flex flex-col items-center gap-6"
-          >
+        {/* MOBILE/TABLET LAYOUT */}
+        <div className="lg:hidden col-span-full space-y-8">
+          <nav aria-label="Curated categories (mobile)" className="flex flex-col items-center gap-6">
             {categories.map((cat, idx) => {
               const isActive = idx === activeIndex;
               return (
                 <Link
                   key={cat.name}
                   to={`/collections/${cat.handle}`}
-                  onMouseEnter={() => setActiveIndex(idx)}
-                  onFocus={() => setActiveIndex(idx)}
                   onClick={() => setActiveIndex(idx)}
                   className="group"
                 >
                   <span
                     className={[
                       "font-primary uppercase text-center",
-                      // big type that scales nicely on small screens
                       "text-[clamp(1.25rem,7vw,2rem)] leading-tight",
                       "tracking-[0.06em]",
                       isActive
@@ -167,32 +159,14 @@ export default function Categories() {
               );
             })}
           </nav>
-
-          {/* Extra spacing before the image on mobile like your mock */}
-          <div className="mt-6">
-            <Card className="border-0 shadow-none">
-              <CardContent className="p-0">
-                <AspectRatio ratio={4 / 5} className="overflow-hidden rounded-2xl">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={categories[activeIndex].name + "-m"}
-                      src={categories[activeIndex].img}
-                      alt={categories[activeIndex].name}
-                      className="h-full w-full select-none object-contain"
-                      draggable="false"
-                      loading="lazy"
-                      decoding="async"
-                      initial={{ opacity: 0, scale: 0.96, y: 24 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 1.03, y: -24 }}
-                      transition={{ duration: 0.55, ease: "easeInOut" }}
-                    />
-                  </AnimatePresence>
-                </AspectRatio>
-              </CardContent>
-            </Card>
-          </div>
+          
+          {/* Mobile Image Preview */}
+          <CategoryImage
+            category={categories[activeIndex]}
+            motionKey={categories[activeIndex].name + "-m"}
+          />
         </div>
+
       </div>
     </section>
   );

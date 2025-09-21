@@ -6,7 +6,7 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
   const videoRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isCoarse, setIsCoarse] = useState(false); // hide hint on touch devices
+  const [isCoarse, setIsCoarse] = useState(false); // Hide hint on touch devices
 
   // Preloading video to prioritize it
   useEffect(() => {
@@ -21,8 +21,8 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
     }
   }, []);
 
-  // Auto-start the video on click
-  const handleScreenClick = () => {
+  // Auto-start the video on click or touch
+  const handleScreenClick = (e) => {
     if (videoRef.current && !hasStarted) {
       videoRef.current
         .play()
@@ -33,7 +33,9 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
 
   // Track mouse movement for hint positioning
   const handleMouseMove = (e) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
+    if (!isCoarse) {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    }
   };
 
   // Handle skipping the video
@@ -43,11 +45,18 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
     onVideoEnd && onVideoEnd();
   };
 
+  // Handling video playback errors
+  const handleVideoError = (err) => {
+    console.error("Video playback failed:", err);
+    // Fallback logic if video fails to load
+  };
+
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden cursor-pointer"
       onClick={handleScreenClick}
       onMouseMove={handleMouseMove}
+      onTouchStart={handleScreenClick} // Fallback for touch devices
       aria-label="Intro video preloader"
       role="dialog"
     >
@@ -56,9 +65,10 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
         src={preloader}
         preload="auto" // Preload the video for faster loading
         playsInline
-        muted={false}
+        muted={true} // Ensure muted for autoplay to work on mobile
         controls={false}
         onEnded={onVideoEnd}
+        onError={handleVideoError}
         className="h-full w-full object-cover block"
       />
 

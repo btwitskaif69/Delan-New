@@ -138,7 +138,7 @@ export default function MaxiMidi() {
   if (loading) {
     return (
       <section id="trousers-section" className="bg-white px-[5%] py-10 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[#642c44] mb-8">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
           Maxi & Midi Dresses
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -165,7 +165,7 @@ export default function MaxiMidi() {
   if (error) {
     return (
       <section id="short-dresses-section" className="bg-white px-[5%] py-12 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[#642c44] mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
           Maxi & Midi Dresses
         </h2>
         <p className="font-secondary text-[#642c44]/80">
@@ -190,7 +190,7 @@ export default function MaxiMidi() {
 
   return (
     <section id="short-dresses-section" className="bg-white px-[5%] py-12 text-center">
-      <h2 className="font-primary text-[2.2rem] sm:text-4xl font-semibold text-[color:var(--brand-642,#642c44)] mb-8">
+      <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
         Maxi & Midi Dresses
       </h2>
 

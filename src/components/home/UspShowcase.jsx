@@ -182,10 +182,10 @@ export default function UspShowcase() {
                   : "opacity-0 translate-y-5",
               ].join(" ")}
             >
-              <h2 className="text-3xl lg:text-[2.5rem] font-semibold mb-4 whitespace-normal">
+              <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4 whitespace-normal">
                 {usp.title}
               </h2>
-              <p className="text-base lg:text-xl text-[#a64d79] mb-5 leading-7 lg:leading-8">
+              <p className="text-base lg:text-xl text-primary mb-5 leading-7 lg:leading-8">
                 {usp.description}
               </p>
 

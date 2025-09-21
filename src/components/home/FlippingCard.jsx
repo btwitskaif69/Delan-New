@@ -176,7 +176,7 @@ When you wear Delan, you're not copying others. You're showing the world who you
           aria-label="Front"
         >
           <CardContent className="relative p-6 h-full grid place-items-center">
-            <h1 className="font-serif font-bold text-[color:var(--card-theme)] leading-tight text-left text-[clamp(1.2rem,4.6vw,2rem)] whitespace-nowrap">
+            <h1 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl">
               DELAN REMEMBER HER
             </h1>
 

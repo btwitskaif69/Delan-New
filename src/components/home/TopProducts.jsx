@@ -28,7 +28,7 @@ function Stars({ value = 0 }) {
 function Price({ amount, code }) {
   const num = Number.parseFloat(amount ?? 0);
   return (
-    <p className="font-secondary text-[0.95rem] text-[#642c44]">
+    <p className="font-secondary text-[0.95rem] text-primary">
       ₹{Number.isFinite(num) ? num.toFixed(0) : "0"} {code}
     </p>
   );
@@ -144,7 +144,7 @@ export default function TopProducts() {
   if (loading) {
     return (
       <section className="bg-white px-[5%] py-10 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[#642c44] mb-8">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
           Shop By Category
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -171,10 +171,10 @@ export default function TopProducts() {
   if (error) {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[#642c44] mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
           Shop By Category
         </h2>
-        <p className="font-secondary text-[#642c44]/80">
+        <p className="font-secondary text-primary/80">
           Error loading products: {error}
         </p>
       </section>
@@ -184,10 +184,10 @@ export default function TopProducts() {
   if (!data?.collection || products.length === 0) {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[#642c44] mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
           Shop By Category
         </h2>
-        <p className="font-secondary text-[#642c44]/80">
+        <p className="font-secondary text-primary/80">
           The “top-products” collection could not be found or is empty.
         </p>
       </section>
@@ -196,7 +196,7 @@ export default function TopProducts() {
 
   return (
     <section className="bg-white px-[5%] py-12 text-center">
-      <h2 className="font-primary text-[2.2rem] sm:text-4xl font-semibold text-[color:var(--brand-642,#642c44)] mb-8">
+      <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
         Shop By Category
       </h2>
 

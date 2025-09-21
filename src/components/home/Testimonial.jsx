@@ -177,7 +177,7 @@ export default function Testimonial() {
   if (loading) {
     return (
       <section id="reviews-section" className="bg-accent px-[5%] py-12">
-        <h2 className="text-center font-primary text-[clamp(1.6rem,3.2vw,2.4rem)] font-semibold text-[color:var(--brand-642,#642c44)] mb-8">
+        <h2 className="text-center cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
           What Our Customers Say
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -205,7 +205,7 @@ export default function Testimonial() {
   if (error) {
     return (
       <section id="reviews-section" className="bg-accent px-[5%] py-12 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[color:var(--brand-642,#642c44)] mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
           What Our Customers Say
         </h2>
         <p className="font-secondary text-[#642c44]/80">Couldn’t load reviews: {error}</p>
@@ -216,7 +216,7 @@ export default function Testimonial() {
   if (!items.length) {
     return (
       <section id="reviews-section" className="bg-accent px-[5%] py-12 text-center">
-        <h2 className="font-primary text-3xl sm:text-4xl font-semibold text-[color:var(--brand-642,#642c44)] mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
           What Our Customers Say
         </h2>
         <p className="font-secondary text-[#642c44]/80">No approved reviews found yet.</p>
@@ -229,7 +229,7 @@ export default function Testimonial() {
 
   return (
     <section id="reviews-section" className="bg-accent px-[5%] py-12">
-      <h2 className="text-center font-primary text-[clamp(1.6rem,3.2vw,2.4rem)] font-semibold text-[color:var(--brand-642,#642c44)] mb-2">
+      <h2 className="text-center cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-2">
         What Our Customers Say
       </h2>
       <p className="text-center font-secondary text-neutral-600 mb-8">

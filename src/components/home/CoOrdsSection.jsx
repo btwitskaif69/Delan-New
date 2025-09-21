@@ -94,10 +94,10 @@ export default function CoOrdsSection() {
       {/* Top layout */}
       <div className="mx-auto grid w-[min(90%,1400px)] items-center justify-items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         {/* Left text (desktop) */}
-        <div className="hidden select-none text-[#642c44] md:flex md:flex-col md:justify-center">
-          <span className="font-primary text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">FIND</span>
-          <span className="ml-16 font-primary text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">YOUR</span>
-          <span className="ml-36 font-primary text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">VIBE</span>
+        <div className="hidden select-none text-primary md:flex md:flex-col md:justify-center">
+          <span className="cormorant-garamond-700 text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">FIND</span>
+          <span className="ml-16 cormorant-garamond-700 text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">YOUR</span>
+          <span className="ml-36 cormorant-garamond-700 text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">VIBE</span>
         </div>
 
         {/* Center carousel (one image per card, no crop) */}
@@ -110,7 +110,7 @@ export default function CoOrdsSection() {
                 </div>
               ) : !hasSlides ? (
                 <div className="grid h-[380px] w-[280px] place-items-center rounded-xl md:h-[350px] md:w-[260px] sm:h-[320px] sm:w-[240px]">
-                  <p className="font-secondary text-sm text-[#642c44]/70">No products found.</p>
+                  <p className="font-secondary text-sm text-primary/70">No products found.</p>
                 </div>
               ) : (
                 <Carousel
@@ -149,15 +149,15 @@ export default function CoOrdsSection() {
         </div>
 
         {/* Right text (desktop) */}
-        <div className="hidden select-none text-right text-[#642c44] md:flex md:flex-col md:justify-center">
-          <span className="-mr-12 font-primary text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">OWN</span>
-          <span className="mr-4 font-primary text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">YOUR</span>
-          <span className="mr-10 font-primary text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">MOMENT</span>
+        <div className="hidden select-none text-right text-primary md:flex md:flex-col md:justify-center">
+          <span className="-mr-12 cormorant-garamond-700 text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">OWN</span>
+          <span className="mr-4 cormorant-garamond-700 text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">YOUR</span>
+          <span className="mr-10 cormorant-garamond-700 text-[clamp(28px,4.5vw,56px)] font-bold leading-tight">MOMENT</span>
         </div>
 
         {/* Mobile/tablet headline */}
         <div className="col-span-full flex w-full items-center justify-center gap-2 md:hidden">
-          <p className="font-primary text-[clamp(28px,7vw,44px)] font-bold leading-none text-[#642c44]">
+          <p className="cormorant-garamond-700 text-[clamp(28px,7vw,44px)] font-bold leading-none text-primary">
             FIND YOUR VIBE
           </p>
         </div>
@@ -165,11 +165,11 @@ export default function CoOrdsSection() {
 
       {/* Description / CTA synced to slide */}
       <div className="mx-auto mt-6 flex max-w-[900px] flex-col items-center px-5 text-center">
-        <p className="font-secondary text-sm tracking-wide text-[#642c44]/90">{activeMeta.title}</p>
-        <h3 className="font-primary mt-1 text-[clamp(1.25rem,2.2vw,1.8rem)] font-bold leading-snug text-[#642c44]">
+        <p className="font-secondary text-md tracking-wide text-primary">{activeMeta.title}</p>
+        <h3 className="cormorant-garamond-700 mt-1 text-[clamp(1.25rem,2.2vw,2.5rem)] font-bold leading-snug text-primary">
           {activeMeta.subtitle}
         </h3>
-        <p className="font-secondary mt-1 max-w-[640px] text-[clamp(0.95rem,1.6vw,1.1rem)] leading-relaxed text-[#a64d79]">
+        <p className="font-secondary mt-1 max-w-[640px] text-[clamp(0.95rem,1.6vw,1.1rem)] leading-relaxed text-primary">
           {activeMeta.tagline}
         </p>
 

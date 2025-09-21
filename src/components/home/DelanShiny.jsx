@@ -23,13 +23,13 @@ const DelanShiny = () => {
         <ShinyText
           text="Own It #TrustYourStyle"
           disabled={false}
-          speed={7}
+          speed={6}
           className="
             custom-class
             font-semibold tracking-tight
             leading-[2]
             text-[clamp(2rem,8vw,7rem)]   /* responsive: 32px → ~96px */
-            mx-auto
+            mx-auto cormorant-garamond-700
           "
         />
       </div>

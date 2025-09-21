@@ -62,12 +62,12 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
   ]), [data, i1, i2, i3]);
 
   return (
-    <section className="bg-[#f6e9e6] px-[5%] py-12">
+    <section className="bg-accent px-[5%] py-12">
       <header className="mx-auto mb-5 max-w-[1200px]">
-        <h2 className="font-primary italic uppercase tracking-[0.04em] text-[color:var(--brand-642,#642c44)] font-semibold text-[clamp(1.6rem,4vw,3rem)]">
+        <h2 className="cormorant-garamond-700 text-center text-3xl md:text-4xl lg:text-5xl uppercase text-primary">
           DESIGNED FOR YOUR TRUE STYLE
         </h2>
-        <p className="font-secondary mt-1 text-[0.95rem] text-black/60">
+        <p className="font-secondary mt-1 text-xl text-primary text-center">
           To make things easier, we’ve gathered your favorites here.
         </p>
       </header>
@@ -114,7 +114,7 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
                     className="basis-full sm:basis-1/2 lg:basis-1/3"
                   >
                     <article className="flex flex-col gap-2">
-                      <div className="font-secondary text-[0.72rem] uppercase tracking-[0.12em] text-black/65">
+                      <div className="font-secondary text-[0.8rem] uppercase tracking-[0.12em] text-primary">
                         {cfg.label}
                       </div>
 

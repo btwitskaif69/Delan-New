@@ -78,7 +78,7 @@ export default function StatsCounter() {
     <section className="bg-accent">
       {/* Intro */}
       <div className="mx-auto max-w-[960px] px-4 pt-12 text-center text-primary">
-        <h1 className="font-primary font-bold text-[clamp(1.75rem,3.6vw,2.5rem)] leading-tight">
+        <h1 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl">
           The Delan Essence
         </h1>
         <p className="font-secondary mx-auto mt-3 max-w-[68ch] text-[clamp(0.95rem,1.2vw,1.05rem)] leading-relaxed text-neutral-700">

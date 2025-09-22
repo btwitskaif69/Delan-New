@@ -405,3 +405,40 @@ export const GET_PRODUCT_RECOMMENDATIONS = /* GraphQL */ `
   }
 `;
 
+// Fetch a compact product card by handle (works with url/src for compatibility)
+export const GET_PRODUCT_CARD_BY_HANDLE = /* GraphQL */ `
+  query getProductCardByHandle($handle: String!) {
+    product(handle: $handle) {
+      id
+      title
+      handle
+      images(first: 1) {
+        edges {
+          node {
+            url
+            src
+            altText
+          }
+        }
+      }
+      priceRange {
+        minVariantPrice { amount currencyCode }
+      }
+    }
+  }
+`;
+export const GET_PRODUCT_REVIEWS = /* GraphQL */ `
+  query getProductReviews($handle: String!) {
+    product(handle: $handle) {
+      id
+      title
+      metafields(
+        identifiers: [{ namespace: "air_reviews_product", key: "data" }]
+      ) {
+        key
+        namespace
+        value
+      }
+    }
+  }
+`;

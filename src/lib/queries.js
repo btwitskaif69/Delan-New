@@ -379,3 +379,29 @@ export const GET_PRODUCTS_WITH_REVIEWS = /* GraphQL */ `
     }
   }
 `;
+
+// Product-to-product recommendations by Shopify
+export const GET_PRODUCT_RECOMMENDATIONS = /* GraphQL */ `
+  query getProductRecommendations($productId: ID!) {
+    productRecommendations(productId: $productId) {
+      id
+      title
+      handle
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      images(first: 1) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+    }
+  }
+`;
+

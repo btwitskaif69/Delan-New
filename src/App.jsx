@@ -6,7 +6,7 @@ import Home from '@/components/pages/Home'
 import Footer from "./components/Footer";
 import Collection from "./components/pages/Collection";
 import Marquee from "./components/Marquee";
-// import Product from "./components/pages/Product";
+import Product from "./components/pages/Product";
 
 // --- simple placeholders (swap with your real pages)
 const Account = () => <div className="p-6">Account</div>;
@@ -27,7 +27,8 @@ export default function App() {
 
         {/* Shopify-style routes you’ll likely need */}
         <Route path="/collections/:handle" element={<Collection />} />
-        {/* <Route path="/products/:handle" element={<Product />} /> */}
+        <Route path="/products/:handle" element={<Product />} />
+
 
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

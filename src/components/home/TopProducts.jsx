@@ -171,7 +171,7 @@ export default function TopProducts() {
   if (error) {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
           Shop By Category
         </h2>
         <p className="font-secondary text-primary/80">
@@ -184,7 +184,7 @@ export default function TopProducts() {
   if (!data?.collection || products.length === 0) {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
           Shop By Category
         </h2>
         <p className="font-secondary text-primary/80">
@@ -196,7 +196,7 @@ export default function TopProducts() {
 
   return (
     <section className="bg-white px-[5%] py-12 text-center">
-      <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-8">
         Shop By Category
       </h2>
 

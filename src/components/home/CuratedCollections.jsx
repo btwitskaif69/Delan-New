@@ -1,3 +1,4 @@
+// src/components/CuratedCollections.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { shopify } from "@/lib/shopify";
@@ -12,20 +13,43 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { GET_CURATED_THREE } from "@/lib/queries";
+
 /**
  * Pass custom labels/handles with the `items` prop (length 3).
- * Example:
- * <CuratedCollections items={[
- *   { label: "SUMMER & RESORT", handle: "summer-resort" },
- *   { label: "WINTER & FESTIVE", handle: "winter-festive" },
- *   { label: "THE FINISHING STROKE: TOPS", handle: "tops" }
- * ]}/>
+ * Make sure `handle` is the EXACT Shopify collection handle (slug).
  */
 const DEFAULT_ITEMS = [
   { label: "SUMMER & RESORT", handle: "summer-resort" },
   { label: "WINTER & FESTIVE", handle: "winter-festive" },
-  { label: "THE MAIN EVENT", handle: "tops" },
+  // ⬇️ Use the real handle here (example slug); avoid spaces/&
+  { label: "MONSOON & TRANSITIONAL", handle: "monsoon-transitional" },
 ];
+
+// (Optional) Normalizer if your incoming handle strings have spaces/&.
+// Prefer passing the exact handle from admin instead.
+const normalizeHandle = (h) =>
+  String(h || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s*&\s*/g, "-and-")
+    .replace(/\s+/g, "-");
+
+function getPrimaryImage(col) {
+  // Try collection image first
+  const ci = col?.image;
+  const cUrl = ci?.url || ci?.src;
+  if (cUrl) {
+    return { url: cUrl, alt: ci?.altText || col?.title || "" };
+  }
+  // Fallback: first product's first image
+  const pimg = col?.products?.edges?.[0]?.node?.images?.edges?.[0]?.node;
+  const pUrl = pimg?.url || pimg?.src;
+  if (pUrl) {
+    return { url: pUrl, alt: pimg?.altText || col?.title || "" };
+  }
+  // Last resort
+  return { url: "/images/placeholder-4x5.png", alt: col?.title || "Collection" };
+}
 
 export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
   const [i1, i2, i3] = items;
@@ -39,10 +63,11 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
       try {
         setLoading(true);
         setErr(null);
+        // If you're unsure of the exact slugs, normalize; best is to pass correct handles.
         const d = await shopify(GET_CURATED_THREE, {
-          h1: i1.handle,
-          h2: i2.handle,
-          h3: i3.handle,
+          h1: normalizeHandle(i1.handle) || i1.handle,
+          h2: normalizeHandle(i2.handle) || i2.handle,
+          h3: normalizeHandle(i3.handle) || i3.handle,
         });
         if (!cancelled) setData(d);
       } catch (e) {
@@ -53,13 +78,17 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
       }
     })();
     return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i1.handle, i2.handle, i3.handle]);
 
-  const cards = useMemo(() => ([
-    { cfg: i1, col: data?.c1 },
-    { cfg: i2, col: data?.c2 },
-    { cfg: i3, col: data?.c3 },
-  ]), [data, i1, i2, i3]);
+  const cards = useMemo(
+    () => [
+      { cfg: i1, col: data?.c1 },
+      { cfg: i2, col: data?.c2 },
+      { cfg: i3, col: data?.c3 },
+    ],
+    [data, i1, i2, i3]
+  );
 
   return (
     <section className="bg-accent px-[5%] py-12">
@@ -98,15 +127,14 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
       {/* Content */}
       {!loading && !err && (
         <div className="mx-auto max-w-[1200px]">
-          <Carousel
-            opts={{ align: "start", loop: false }}
-            className="relative"
-          >
+          <Carousel opts={{ align: "start", loop: false }} className="relative">
             <CarouselContent>
               {cards.map(({ cfg, col }) => {
-                const img = col?.image?.url || "/images/placeholder-4x5.png";
-                const alt = col?.image?.altText || col?.title || cfg.label;
-                const link = `/collections/${col?.handle || cfg.handle}`;
+                // if collection lookup failed, keep link using provided handle for now
+                const linkHandle = col?.handle || normalizeHandle(cfg.handle) || cfg.handle;
+                const link = `/collections/${linkHandle}`;
+                const imgMeta = getPrimaryImage(col);
+                const alt = imgMeta.alt || col?.title || cfg.label;
 
                 return (
                   <CarouselItem
@@ -120,9 +148,9 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
 
                       <Link to={link} aria-label={`Open ${cfg.label}`}>
                         <div className="rounded-md bg-white shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
-                          <AspectRatio ratio={4 / 5} className="overflow-hidden rounded-md">
+                          <AspectRatio ratio={3 / 4} className="overflow-hidden rounded-md">
                             <img
-                              src={img}
+                              src={imgMeta.url}
                               alt={alt}
                               className="h-full w-full select-none object-cover transition-transform duration-300 hover:scale-[1.04]"
                               loading="lazy"

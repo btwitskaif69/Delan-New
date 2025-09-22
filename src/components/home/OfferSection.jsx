@@ -148,7 +148,7 @@ export default function OfferSection() {
   if (loading) {
     return (
       <section id="offers-section" className="bg-white px-[5%] py-10 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-8">
           Offers & Sale
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -175,7 +175,7 @@ export default function OfferSection() {
   if (error) {
     return (
       <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
           Offers & Sale
         </h2>
         <p className="font-secondary text-[#642c44]/80">
@@ -188,7 +188,7 @@ export default function OfferSection() {
   if (!discountedProducts.length) {
     return (
       <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
           Offers & Sale
         </h2>
         <p className="font-secondary text-[#642c44]/80">
@@ -200,7 +200,7 @@ export default function OfferSection() {
 
   return (
     <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
-      <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-8">
         Offers & Sale
       </h2>
 

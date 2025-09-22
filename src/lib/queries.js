@@ -242,28 +242,57 @@ export const CART_LINES_ADD = /* GraphQL */ `
   }
 `;
 
+// GET_CURATED_THREE with product-image fallback + url/src compatibility
 export const GET_CURATED_THREE = /* GraphQL */ `
   query CuratedCollections($h1: String!, $h2: String!, $h3: String!) {
     c1: collection(handle: $h1) {
       id
       handle
       title
-      image { url altText }
+      image { url altText src }
+      products(first: 1) {
+        edges {
+          node {
+            images(first: 1) {
+              edges { node { url altText src } }
+            }
+          }
+        }
+      }
     }
     c2: collection(handle: $h2) {
       id
       handle
       title
-      image { url altText }
+      image { url altText src }
+      products(first: 1) {
+        edges {
+          node {
+            images(first: 1) {
+              edges { node { url altText src } }
+            }
+          }
+        }
+      }
     }
     c3: collection(handle: $h3) {
       id
       handle
       title
-      image { url altText }
+      image { url altText src }
+      products(first: 1) {
+        edges {
+          node {
+            images(first: 1) {
+              edges { node { url altText src } }
+            }
+          }
+        }
+      }
     }
   }
 `;
+
 
 // Products with pricing for offer detection (no gql tag)
 export const GET_OFFER_PRODUCTS = /* GraphQL */ `

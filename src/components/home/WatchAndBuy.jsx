@@ -114,7 +114,7 @@ export default function WatchAndBuy() {
 
   return (
     <section className="bg-white px-5 py-10 sm:px-[5%]">
-      <h2 className="text-center cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-6">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
         Discover Your Look
       </h2>
 

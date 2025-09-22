@@ -47,6 +47,8 @@ export default function Home() {
       {/* Page content (behind the fixed preloader) */}
       <HeroSection />
       <CategoriesSection />
+      <WatchAndBuy />
+      <OfferSection />
       <InteractiveModelSection />
       <StatsCounter />
       <CoOrdsSection />
@@ -58,8 +60,6 @@ export default function Home() {
       <ShortDressSection />
       <MaxiMidi />
       <UspShowcase />
-      <WatchAndBuy />
-      <OfferSection />
       <Testimonial />
       <FlippingCard />
       <DelanShiny />

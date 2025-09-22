@@ -140,7 +140,7 @@ export default function WatchAndBuy() {
           role="region"
           aria-label="Reels carousel"
           className="
-            flex gap-5 overflow-x-auto px-1 py-2 scroll-smooth
+            flex gap-5 overflow-x-hidden px-1 py-2 scroll-smooth
             snap-x snap-mandatory cursor-grab
             [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
           "

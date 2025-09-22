@@ -24,7 +24,7 @@ import { GET_CURATED_THREE } from "@/lib/queries";
 const DEFAULT_ITEMS = [
   { label: "SUMMER & RESORT", handle: "summer-resort" },
   { label: "WINTER & FESTIVE", handle: "winter-festive" },
-  { label: "THE FINISHING STROKE: TOPS", handle: "tops" },
+  { label: "THE MAIN EVENT", handle: "tops" },
 ];
 
 export default function CuratedCollections({ items = DEFAULT_ITEMS }) {

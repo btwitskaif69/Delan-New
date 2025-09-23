@@ -125,7 +125,7 @@ export default function UspShowcase() {
       {/* Centered top heading */}
       <header className="px-4 md:px-[5%] pt-12 md:pt-16 pb-6 md:pb-10 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
-          Where Comfort, Craft & Conscience Meet
+          Crafted with Purpose
         </h2>
       </header>
 

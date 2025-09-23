@@ -188,7 +188,7 @@ export default function Navbar() {
 
           <Link
             to="/tools/track-order"
-            className="hidden lg:inline-flex items-center gap-2 text-sm hover:opacity-80 montserrat-400"
+            className="hidden lg:inline-flex items-center gap-2 text-sm hover:opacity-80 montserrat-500"
           >
             <Truck className="h-4 w-4" />
             Track Order
@@ -215,7 +215,7 @@ export default function Navbar() {
             <Search className="h-5 w-5" />
           </button>
 
-          <Link to="/account/login" className="hidden sm:inline text-sm hover:opacity-80 montserrat-400">
+          <Link to="/account/login" className="hidden sm:inline text-sm hover:opacity-80 montserrat-500">
             Login <span className="mx-1 opacity-60">/</span> Sign Up
           </Link>
 
@@ -248,7 +248,7 @@ export default function Navbar() {
                   <NavigationMenuItem key={m.title} className="relative">
                     <Link
                       to={toRelative(m.url)}
-                      className={`montserrat-400 px-4 py-4 text-xs uppercase hover:bg-black/5 rounded transition ${
+                      className={`montserrat-500 px-4 py-4 text-xs uppercase hover:bg-black/5 rounded transition ${
                         location.pathname === toRelative(m.url) ? "text-black" : PRIMARY_TEXT
                       }`}
                     >
@@ -262,7 +262,7 @@ export default function Navbar() {
                 <NavigationMenuItem key={m.title} className="relative">
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button className="group montserrat-400 px-4 py-4 text-md uppercase rounded bg-transparent hover:bg-black/5 inline-flex items-center text-primary">
+                      <button className="group montserrat-500 px-4 py-4 text-md uppercase rounded bg-transparent hover:bg-black/5 inline-flex items-center text-primary">
                         {m.title}
                         <span className="ml-1 text-[10px] transition-transform group-data-[state=open]:rotate-180" aria-hidden>
                           ▾
@@ -281,7 +281,7 @@ export default function Navbar() {
                           <li key={c.title}>
                             <Link
                               to={toRelative(c.url)}
-                              className="montserrat-400 text-primary flex items-center gap-2 px-4 py-2 text-[15px] leading-5 hover:bg-black/5"
+                              className="montserrat-500 text-primary flex items-center gap-2 px-4 py-2 text-[15px] leading-5 hover:bg-black/5"
                             >
                               <span aria-hidden className="text-lg leading-none">•</span>
                               <span>{c.title}</span>
@@ -319,7 +319,7 @@ function MobileMenu({ items }) {
       <nav className="px-2 py-2">
         <Link
           to="/tools/track-order"
-          className="montserrat-400 flex items-center gap-2 rounded px-3 py-3 text-sm hover:bg-black/5"
+          className="montserrat-500 flex items-center gap-2 rounded px-3 py-3 text-sm hover:bg-black/5"
         >
           <Truck className="h-4 w-4" /> Track Order
         </Link>
@@ -333,7 +333,7 @@ function MobileMenu({ items }) {
               <Link
                 key={m.title}
                 to={toRelative(m.url)}
-                className="montserrat-400 block rounded px-3 py-3 text-base hover:bg-black/5"
+                className="montserrat-500 block rounded px-3 py-3 text-base hover:bg-black/5"
               >
                 {m.title}
               </Link>
@@ -344,7 +344,7 @@ function MobileMenu({ items }) {
             <div key={m.title}>
               <button
                 onClick={() => setOpen((s) => ({ ...s, [i]: !s[i] }))}
-                className="montserrat-400 flex w-full items-center justify-between rounded px-3 py-3 text-base hover:bg-black/5"
+                className="montserrat-500 flex w-full items-center justify-between rounded px-3 py-3 text-base hover:bg-black/5"
                 aria-expanded={isOpen}
               >
                 <span>{m.title}</span>
@@ -356,7 +356,7 @@ function MobileMenu({ items }) {
                     <Link
                       key={c.title}
                       to={toRelative(c.url)}
-                      className="montserrat-400 block rounded px-3 py-2 text-[15px] hover:bg-black/5"
+                      className="montserrat-500 block rounded px-3 py-2 text-[15px] hover:bg-black/5"
                     >
                       {c.title}
                     </Link>
@@ -369,10 +369,10 @@ function MobileMenu({ items }) {
       </nav>
 
       <div className="mt-3 border-t border-[#eee5ea] px-2 py-3">
-        <Link to="/account/login" className="montserrat-400 block rounded px-3 py-2 text-sm hover:bg-black/5">
+        <Link to="/account/login" className="montserrat-500 block rounded px-3 py-2 text-sm hover:bg-black/5">
           Login
         </Link>
-        <Link to="/account/register" className="montserrat-400 block rounded px-3 py-2 text-sm hover:bg-black/5">
+        <Link to="/account/register" className="montserrat-500 block rounded px-3 py-2 text-sm hover:bg-black/5">
           Sign Up
         </Link>
       </div>

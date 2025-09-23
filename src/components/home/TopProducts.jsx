@@ -91,7 +91,7 @@ export default function TopProducts({
     if (loading) {
       return (
         <section className="bg-white px-[5%] py-10 text-center">
-          <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+          <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -115,7 +115,7 @@ export default function TopProducts({
     if (error) {
       return (
         <section className="bg-white px-[5%] py-12 text-center">
-          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
           <p className="font-secondary text-primary/80">Error: {error}</p>
@@ -126,7 +126,7 @@ export default function TopProducts({
     if (collections.length === 0) {
       return (
         <section className="bg-white px-[5%] py-12 text-center">
-          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
           <p className="font-secondary text-primary/80">No collections found.</p>
@@ -136,7 +136,7 @@ export default function TopProducts({
 
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
         <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 mb-8">
@@ -259,7 +259,7 @@ export default function TopProducts({
   if (loading) {
     return (
       <section className="bg-white px-[5%] py-10 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -286,7 +286,7 @@ export default function TopProducts({
   if (error) {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
         <p className="font-secondary text-primary/80">Error loading products: {error}</p>
@@ -297,7 +297,7 @@ export default function TopProducts({
   if (!data?.collection || products.length === 0) {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
         <p className="font-secondary text-primary/80">
@@ -309,7 +309,7 @@ export default function TopProducts({
 
   return (
     <section className="bg-white px-[5%] py-12 text-center">
-      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
         {title}
       </h2>
 

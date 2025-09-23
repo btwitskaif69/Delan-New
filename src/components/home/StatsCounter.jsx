@@ -60,7 +60,7 @@ export default function StatsCounter() {
       <Card className="w-full bg-card-none shadow-none">
         <CardContent className="px-6 py-6 text-center">
           <h3
-            className="font-secondary text-5xl md:text-6xl font-medium text-primary leading-none"
+            className="font-secondary text-5xl md:text-5xl font-medium text-primary leading-none"
             aria-live="polite"
           >
             {count.toLocaleString()}
@@ -78,10 +78,10 @@ export default function StatsCounter() {
     <section className="bg-accent">
       {/* Intro */}
       <div className="mx-auto max-w-[960px] px-4 pt-12 text-center text-primary">
-        <h1 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl">
+        <h1 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           The Delan Essence
         </h1>
-        <p className="font-secondary mx-auto mt-3 max-w-[68ch] text-[clamp(0.95rem,1.2vw,1.05rem)] leading-relaxed text-neutral-700">
+        <p className="montserrat-500 mx-auto mt-3 max-w-[68ch] text-[clamp(0.95rem,1.2vw,1.05rem)] leading-relaxed text-primary">
           From timeless co-ord sets to empowering silhouettes, we’ve reimagined what modern fashion means for women.
           Across India, women aren’t just wearing Delan—they’re expressing confidence, embracing individuality, and
           shaping their own stories with every outfit.

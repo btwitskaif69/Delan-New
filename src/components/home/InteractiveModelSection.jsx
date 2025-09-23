@@ -9,9 +9,9 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 /* USP positions (desktop) */
 const uspsDesktop = [
   { text: "Like every piece is designed just for you.", position: { top: "20%", left: "25%" } },
-  { text: "Comfort that hugs, style that truly stays.", position: { top: "20%", left: "70%" } },
+  { text: "Comfort that hugs, style that truly stays.", position: { top: "20%", left: "72%" } },
   { text: "A wardrobe choice you’ll never regret making.", position: { top: "60%", left: "25%" } },
-  { text: "Outfits that vibe with every mood and moment.", position: { top: "60%", left: "70%" } },
+  { text: "Outfits that vibe with every mood and moment.", position: { top: "60%", left: "72%" } },
   { text: "Quality that speaks before you even say a word.", position: { top: "80%", left: "50%" } },
 ];
 
@@ -41,7 +41,7 @@ function UspItem({ usp, index, scrollYProgress }) {
                sm:bg-transparent sm:backdrop-blur-none py-0!"
   >
     <CardContent className="px-5 py-3">
-      <p className="font-secondary text-center text-sm md:text-base text-primary font-semibold">
+      <p className="montserrat-500 text-center text-sm md:text-base text-primary font-semibold">
         {usp.text}
       </p>
     </CardContent>
@@ -92,7 +92,7 @@ export default function InteractiveModelSection({ nextSectionRef }) {
           <h2 className="font-primary cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl font-bold">
             Why Delan Feels Like You
           </h2>
-          <p className="font-secondary text-md md:text-xl">
+          <p className="montserrat-500 text-md md:text-lg">
             Because fashion should vibe with your story.
           </p>
         </motion.div>

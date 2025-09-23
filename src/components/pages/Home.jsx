@@ -26,9 +26,9 @@ import Preloader from "@/components/Preloader";
 /** Tabs for StickyNav (no Reviews; “Categories” shows collections) */
 const NAV_TABS = [
   { key: "categories",  label: "Categories",  mode: "collections" }, // special mode
-  { key: "bestsellers", label: "Bestsellers", handle: "bestsellers" },
+  { key: "back-in-stock-bestsellers", label: "Bestsellers", handle: "back-in-stock-bestsellers" },
   { key: "trousers",    label: "Trousers",    handle: "trousers" },
-  { key: "short",       label: "Short Dress", handle: "short-dresses" },
+  { key: "short-dress",       label: "Short Dress", handle: "short-dress" },
   { key: "maxi-midi",   label: "Maxi & Midi", handle: "maxi-midi-dress" },
   { key: "co-ords",     label: "Co-ords",     handle: "co-ords" },
 ];

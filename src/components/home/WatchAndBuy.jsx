@@ -20,14 +20,67 @@ import image5 from "@/assets/images/image5.png";
 
 export default function WatchAndBuy() {
   const videos = [
-    { id: 1, videoUrl: Tropical,  productName: "Tropical Blush Co-ord Set",                    productLink: "/collections/co-ords/products/tropical-blush-set", thumbnail: image1 },
-    { id: 2, videoUrl: Earthy,    productName: "Earthy Green Co-ord Set",                      productLink: "https://shopify-storefront-rlry.vercel.app/products/earthy-green-embroidered-waistcoat-co-ord-set", thumbnail: image2 },
-    { id: 3, videoUrl: Sunsoaked, productName: "Sunsoaked Terra Co-ord Set",                   productLink: "/collections/co-ords/products/sunsoaked-terra-set", thumbnail: image3 },
-    { id: 4, videoUrl: HighWaist, productName: "High Waist Flared Trousers",                   productLink: "/collections/bottoms/products/high-waist-trousers", thumbnail: image4 },
-    { id: 5, videoUrl: Leopard,   productName: "Leopard Print One-Shoulder Maxi Dress",        productLink: "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress", thumbnail: image5 },
-    { id: 6, videoUrl: Leopard,   productName: "Leopard Print One-Shoulder Maxi Dress",        productLink: "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress", thumbnail: image5 },
-    { id: 7, videoUrl: Leopard,   productName: "Leopard Print One-Shoulder Maxi Dress",        productLink: "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress", thumbnail: image5 },
-    { id: 8, videoUrl: Leopard,   productName: "Leopard Print One-Shoulder Maxi Dress",        productLink: "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress", thumbnail: image5 },
+    {
+      id: 1,
+      videoUrl: Tropical,
+      productName: "Tropical Blush Co-ord Set",
+      productLink: "/collections/co-ords/products/tropical-blush-set",
+      thumbnail: image1,
+    },
+    {
+      id: 2,
+      videoUrl: Earthy,
+      productName: "Earthy Green Co-ord Set",
+      productLink:
+        "https://shopify-storefront-rlry.vercel.app/products/earthy-green-embroidered-waistcoat-co-ord-set",
+      thumbnail: image2,
+    },
+    {
+      id: 3,
+      videoUrl: Sunsoaked,
+      productName: "Sunsoaked Terra Co-ord Set",
+      productLink: "/collections/co-ords/products/sunsoaked-terra-set",
+      thumbnail: image3,
+    },
+    {
+      id: 4,
+      videoUrl: HighWaist,
+      productName: "High Waist Flared Trousers",
+      productLink: "/collections/bottoms/products/high-waist-trousers",
+      thumbnail: image4,
+    },
+    {
+      id: 5,
+      videoUrl: Leopard,
+      productName: "Leopard Print One-Shoulder Maxi Dress",
+      productLink:
+        "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress",
+      thumbnail: image5,
+    },
+    {
+      id: 6,
+      videoUrl: Leopard,
+      productName: "Leopard Print One-Shoulder Maxi Dress",
+      productLink:
+        "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress",
+      thumbnail: image5,
+    },
+    {
+      id: 7,
+      videoUrl: Leopard,
+      productName: "Leopard Print One-Shoulder Maxi Dress",
+      productLink:
+        "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress",
+      thumbnail: image5,
+    },
+    {
+      id: 8,
+      videoUrl: Leopard,
+      productName: "Leopard Print One-Shoulder Maxi Dress",
+      productLink:
+        "https://delan1.myshopify.com/products/leopard-print-one-shoulder-maxi-dress",
+      thumbnail: image5,
+    },
   ];
 
   const trackRef = useRef(null);
@@ -114,7 +167,7 @@ export default function WatchAndBuy() {
 
   return (
     <section className="bg-white px-5 py-10 sm:px-[5%]">
-      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
         Discover Your Look
       </h2>
 

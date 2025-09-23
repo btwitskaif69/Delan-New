@@ -150,7 +150,7 @@ export default function OfferSection() {
   if (loading) {
     return (
       <section id="offers-section" className="bg-white px-[5%] py-10 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-8">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           Offers & Sale
         </h2>
         <Carousel className="relative">
@@ -183,7 +183,7 @@ export default function OfferSection() {
   if (error) {
     return (
       <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           Offers & Sale
         </h2>
         <p className="font-secondary text-[#642c44]/80">
@@ -196,7 +196,7 @@ export default function OfferSection() {
   if (!discountedProducts.length) {
     return (
       <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           Offers & Sale
         </h2>
         <p className="font-secondary text-[#642c44]/80">
@@ -208,7 +208,7 @@ export default function OfferSection() {
 
   return (
     <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
-      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-8">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
         Offers & Sale
       </h2>
 

@@ -52,35 +52,45 @@ export default function FlippingCard() {
 </div>
             </div>
 
-            {/* BACK: Text only */}
-{/* BACK: Text only (centered + enhanced) */}
-<div className="absolute inset-0 overflow-hidden rounded-2xl bg-accent
-                [backface-visibility:hidden] [transform:rotateY(180deg)]
-                bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.18),transparent_60%)]">
-  <div className="flex h-full items-center justify-center p-6 md:p-10">
-    <div className="max-w-2xl md:max-w-4xl text-center text-primary">
-      {/* Soft opening mark for a premium feel */}
-      <div className=" text-4xl md:text-5xl leading-none text-primary/20 select-none">“</div>
+{/* BACK: Text only (centered, refined, no container highlight) */}
+<div
+  className="absolute inset-0 overflow-hidden rounded-2xl bg-accent
+             [backface-visibility:hidden] [transform:rotateY(180deg)]"
+>
+  <div className="relative z-10 flex h-full items-center justify-center p-6 md:p-10">
+    <div className="relative max-w-2xl md:max-w-4xl text-center text-primary [text-wrap:balance] px-6 py-8 md:px-12 md:py-12">
+      {/* Decorative quotes (very subtle) */}
+      <div className="pointer-events-none absolute left-2 top-1 text-5xl md:text-6xl lg:text-7xl text-primary/15 select-none leading-none">“</div>
+      <div className="pointer-events-none absolute right-2 bottom-1 text-5xl md:text-6xl lg:text-7xl text-primary/15 select-none leading-none">”</div>
 
       <p className="font-secondary text-base md:text-lg lg:text-xl leading-relaxed md:leading-8">
         Finding clothes that show who you really are, while lasting beyond quick fashion trends feels impossible.
       </p>
 
-      <p className="mt-4 font-secondary text-base md:text-lg lg:text-xl leading-relaxed md:leading-8">
+      {/* Minimal divider */}
+      <div className="mx-auto my-5 h-px w-24 bg-primary/20" />
+
+      <p className="font-secondary text-base md:text-lg lg:text-xl leading-relaxed md:leading-8">
         For 25 years, <span className="font-semibold">Delan</span> has helped modern women solve this problem with perfectly fitted pieces made from beautiful,
         long-lasting fabrics that never go out of style.
       </p>
 
-      <p className="mt-4 font-secondary text-base md:text-lg lg:text-xl leading-relaxed md:leading-8">
-        <span className="font-semibold">We don’t just make clothes, we create confidence.</span>
+      {/* Confidence line with a clean accent underline (no size change) */}
+      <p className="mt-4 font-secondary text-lg md:text-xl lg:text-2xl font-semibold leading-relaxed md:leading-8">
+        <span className="relative inline-block">
+          We don’t just make clothes, we create confidence.
+          <span className="block mx-auto mt-2 h-[2px] w-12 bg-primary/30" />
+        </span>
       </p>
 
       <p className="mt-4 font-secondary text-base md:text-lg lg:text-xl leading-relaxed md:leading-8">
         When you wear Delan, you’re not copying others. You’re showing the world who you are. Own it{" "}
-        <span className="font-semibold">#TrustYourStyle</span>
+        <span className="font-semibold underline decoration-primary/30 underline-offset-4">
+          #TrustYourStyle
+        </span>
       </p>
 
-      {/* Flip instruction (bottom-center) */}
+      {/* Flip instruction */}
       <div
         className="pointer-events-none mt-8 text-xs md:text-sm text-primary/60 flex items-end justify-center"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
@@ -91,6 +101,9 @@ export default function FlippingCard() {
     </div>
   </div>
 </div>
+
+
+
 
             {/* /BACK */}
           </div>

@@ -22,6 +22,7 @@ import DelanShiny from "../home/DelanShiny";
 
 // Preloader overlay
 import Preloader from "@/components/Preloader";
+import AvailBanner from "../home/AvailBanner";
 
 /** Tabs for StickyNav (no Reviews; “Categories” shows collections) */
 const NAV_TABS = [
@@ -68,6 +69,7 @@ export default function Home() {
 
       {/* Page content (sits behind the fixed preloader) */}
       <HeroSection />
+      <AvailBanner speed={20000} direction="right" gapClass="gap-16" />
       <CategoriesSection />
       <WatchAndBuy />
       <OfferSection />

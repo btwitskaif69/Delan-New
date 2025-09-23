@@ -52,7 +52,7 @@ export default function Categories() {
 
   return (
     <section id="categories-section" className="bg-white px-[5%] py-12">
-      <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl text-center mb-8">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
         Our Curated Collection
       </h2>
 

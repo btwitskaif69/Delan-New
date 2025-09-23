@@ -1,4 +1,3 @@
-// src/components/TopProducts.jsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { shopify } from "@/lib/shopify";
 import { Link } from "react-router-dom";
@@ -8,6 +7,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   GET_TOP_PRODUCTS,
+  GET_COLLECTIONS,
   CART_CREATE,
   CART_LINES_ADD,
 } from "@/lib/queries";
@@ -34,8 +34,17 @@ function Price({ amount, code }) {
   );
 }
 
-export default function TopProducts() {
-  // data via your shopify() helper
+/**
+ * TopProducts can render:
+ * - mode="products": products for a collection handle (default)
+ * - mode="collections": a grid of collections
+ */
+export default function TopProducts({
+  mode = "products",
+  handle = "top-products",
+  title = "Shop By Category",
+  collectionsFirst = 12, // how many collections to fetch when mode="collections"
+}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState/** @type {null | string} */(null);
   const [data, setData] = useState(null);
@@ -46,11 +55,20 @@ export default function TopProducts() {
       try {
         setLoading(true);
         setError(null);
-        const d = await shopify(GET_TOP_PRODUCTS, { handle: "top-products" });
+
+        let d;
+        if (mode === "collections") {
+          // fetch a list of collections
+          d = await shopify(GET_COLLECTIONS, { first: collectionsFirst });
+        } else {
+          // fetch products for a collection handle
+          d = await shopify(GET_TOP_PRODUCTS, { handle });
+        }
+
         if (!cancelled) setData(d);
       } catch (e) {
         console.error(e);
-        if (!cancelled) setError(e?.message || "Failed to load products");
+        if (!cancelled) setError(e?.message || "Failed to load");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -58,12 +76,118 @@ export default function TopProducts() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [mode, handle, collectionsFirst]);
+
+  /* ================== RENDER COLLECTIONS MODE ================== */
+  if (mode === "collections") {
+    const collections = (data?.collections?.edges ?? []).map(({ node }) => ({
+      id: node.id,
+      handle: node.handle,
+      title: node.title,
+      imgUrl: node.image?.url || node.image?.src || "",
+      altText: node.image?.altText || node.title,
+    }));
+
+    if (loading) {
+      return (
+        <section className="bg-white px-[5%] py-10 text-center">
+          <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+            {title}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Card key={i} className="border-0 shadow-none">
+                <CardContent className="p-0">
+                  <AspectRatio ratio={3 / 4} className="rounded-xl bg-neutral-100">
+                    <Skeleton className="h-full w-full rounded-xl" />
+                  </AspectRatio>
+                  <div className="px-1 pt-3 space-y-2 text-left">
+                    <Skeleton className="h-5 w-2/3" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    if (error) {
+      return (
+        <section className="bg-white px-[5%] py-12 text-center">
+          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+            {title}
+          </h2>
+          <p className="font-secondary text-primary/80">Error: {error}</p>
+        </section>
+      );
+    }
+
+    if (collections.length === 0) {
+      return (
+        <section className="bg-white px-[5%] py-12 text-center">
+          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
+            {title}
+          </h2>
+          <p className="font-secondary text-primary/80">No collections found.</p>
+        </section>
+      );
+    }
+
+    return (
+      <section className="bg-white px-[5%] py-12 text-center">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+          {title}
+        </h2>
+        <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 mb-8">
+          {collections.map((c) => (
+            <Card key={c.id} className="border-0 shadow-none text-left group">
+              <Link
+                to={`/collections/${c.handle}`}
+                aria-label={c.title}
+                className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                style={{ ["--tw-ring-color"]: BRAND }}
+              >
+                <CardContent className="p-0">
+                  <AspectRatio ratio={3 / 4} className="rounded-2xl overflow-hidden bg-rose-50">
+                    {c.imgUrl ? (
+                      <img
+                        src={c.imgUrl}
+                        alt={c.altText}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] select-none"
+                        draggable="false"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div className="grid place-items-center text-sm text-muted-foreground">
+                        No image
+                      </div>
+                    )}
+                  </AspectRatio>
+                  <div className="px-1 pt-3">
+                    <h3
+                      className="font-secondary text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
+                      title={c.title}
+                      style={{ height: "calc(1em * 1.35)" }}
+                    >
+                      {c.title}
+                    </h3>
+                  </div>
+                </CardContent>
+              </Link>
+            </Card>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  /* ================== RENDER PRODUCTS MODE ================== */
 
   const products = useMemo(() => {
     const edges = data?.collection?.products?.edges ?? [];
     return edges.map(({ node }) => {
-      // rating metafield is JSON, commonly { "value": "4.7" }
       let ratingValue = 0;
       if (node.rating?.value) {
         try {
@@ -89,20 +213,13 @@ export default function TopProducts() {
     });
   }, [data]);
 
-  // cart state
   const [cartBusy, setCartBusy] = useState({}); // productId -> boolean | "added"
 
   const getStoredCartId = () => {
-    try {
-      return localStorage.getItem("shopifyCartId") || null;
-    } catch {
-      return null;
-    }
+    try { return localStorage.getItem("shopifyCartId") || null; } catch { return null; }
   };
   const setStoredCartId = (id) => {
-    try {
-      localStorage.setItem("shopifyCartId", id);
-    } catch {}
+    try { localStorage.setItem("shopifyCartId", id); } catch {}
   };
 
   const handleAddToCart = useCallback(
@@ -115,7 +232,6 @@ export default function TopProducts() {
 
         let cartId = getStoredCartId();
         if (!cartId) {
-          // create cart
           const res = await shopify(CART_CREATE, { lines });
           const errs = res?.cartCreate?.userErrors;
           if (errs?.length) throw new Error(errs.map((e) => e.message).join("; "));
@@ -123,7 +239,6 @@ export default function TopProducts() {
           if (!cartId) throw new Error("Failed to create cart.");
           setStoredCartId(cartId);
         } else {
-          // add to existing
           const res = await shopify(CART_LINES_ADD, { cartId, lines });
           const errs = res?.cartLinesAdd?.userErrors;
           if (errs?.length) throw new Error(errs.map((e) => e.message).join("; "));
@@ -140,19 +255,19 @@ export default function TopProducts() {
     []
   );
 
-  /* Loading / Error states */
+  // Loading / Error
   if (loading) {
     return (
       <section className="bg-white px-[5%] py-10 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
-          Shop By Category
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+          {title}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
             <Card key={i} className="border-0 shadow-none">
               <CardContent className="p-0">
-                <AspectRatio ratio={3 / 4} className="rounded-xl bg-neutral-100">
-                  <Skeleton className="h-full w-full rounded-xl" />
+                <AspectRatio ratio={3 / 4} className="rounded-2xl bg-neutral-100">
+                  <Skeleton className="h-full w-full rounded-2xl" />
                 </AspectRatio>
                 <div className="px-1 pt-3 space-y-2 text-left">
                   <Skeleton className="h-5 w-2/3" />
@@ -172,11 +287,9 @@ export default function TopProducts() {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
-          Shop By Category
+          {title}
         </h2>
-        <p className="font-secondary text-primary/80">
-          Error loading products: {error}
-        </p>
+        <p className="font-secondary text-primary/80">Error loading products: {error}</p>
       </section>
     );
   }
@@ -185,10 +298,10 @@ export default function TopProducts() {
     return (
       <section className="bg-white px-[5%] py-12 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
-          Shop By Category
+          {title}
         </h2>
         <p className="font-secondary text-primary/80">
-          The “top-products” collection could not be found or is empty.
+          The “{handle}” collection could not be found or is empty.
         </p>
       </section>
     );
@@ -196,11 +309,10 @@ export default function TopProducts() {
 
   return (
     <section className="bg-white px-[5%] py-12 text-center">
-      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-8">
-        Shop By Category
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+        {title}
       </h2>
 
-      {/* Grid: 4 → 2 → 1 */}
       <div className="grid gap-7 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 mb-8">
         {products.map((product) => {
           const busyState = cartBusy[product.id];
@@ -216,7 +328,6 @@ export default function TopProducts() {
                 style={{ ["--tw-ring-color"]: BRAND }}
               >
                 <CardContent className="p-0">
-                  {/* Image (3:4) + Quick View on hover */}
                   <div className="relative">
                     <AspectRatio ratio={3 / 4} className="rounded-2xl overflow-hidden bg-rose-50">
                       <img
@@ -235,9 +346,7 @@ export default function TopProducts() {
                     </AspectRatio>
                   </div>
 
-                  {/* Details */}
                   <div className="px-1 pt-3 flex flex-col justify-center items-center gap-1.5">
-                    {/* Title: single-line clamp + consistent height */}
                     <h3
                       className="font-secondary text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
                       style={{ height: "calc(1em * 1.35)" }}
@@ -248,14 +357,12 @@ export default function TopProducts() {
 
                     <Price amount={product.price} code={product.currency} />
 
-                    {/* Rating or reserved height */}
                     {product.ratingValue > 0 ? (
                       <Stars value={product.ratingValue} />
                     ) : (
                       <div className="h-5" aria-hidden="true" />
                     )}
 
-                    {/* Add to Cart — stops navigation */}
                     <div className="w-full mt-1.5 flex justify-center items-center">
                       <Button
                         className="font-secondary font-semibold border-2"
@@ -302,7 +409,9 @@ export default function TopProducts() {
           e.currentTarget.style.color = BRAND;
         }}
       >
-        <Link to="/collections/top-products">View All</Link>
+        <Link to={mode === "collections" ? "/collections" : `/collections/${handle}`}>
+          View All
+        </Link>
       </Button>
     </section>
   );

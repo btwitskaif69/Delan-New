@@ -229,7 +229,7 @@ export default function Testimonial() {
 
   return (
     <section id="reviews-section" className="bg-accent px-[5%] py-12">
-      <h2 className="text-center cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-2">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
         What Our Customers Say
       </h2>
       <p className="text-center font-secondary text-neutral-600 mb-8">

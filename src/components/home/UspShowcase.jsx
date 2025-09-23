@@ -124,7 +124,7 @@ export default function UspShowcase() {
     <section className="bg-white font-[var(--font-primary)]">
       {/* Centered top heading */}
       <header className="px-4 md:px-[5%] pt-12 md:pt-16 pb-6 md:pb-10 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-5xl leading-tight uppercase">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
           Where Comfort, Craft & Conscience Meet
         </h2>
       </header>
@@ -202,7 +202,7 @@ export default function UspShowcase() {
                   to="/collections/dresses"
                   className={[
                     buttonVariants?.({ variant: "default" }) ?? "",
-                    "rounded-full bg-[#a64d79] hover:bg-[#94456d] text-white px-6 py-2",
+                    "rounded-full bg-primary hover:bg-primary/90 text-white px-6 py-2",
                     "uppercase tracking-[0.08em] text-[13px] lg:text-[14px]",
                     "shadow-[0_8px_22px_rgba(166,77,121,0.25)] hover:shadow-[0_12px_28px_rgba(166,77,121,0.30)]",
                     "transition-all inline-flex items-center gap-2",
@@ -219,14 +219,14 @@ export default function UspShowcase() {
             <h3 className="text-2xl sm:text-3xl font-semibold mb-3">
               {usps[activeIndex].title}
             </h3>
-            <p className="text-[15px] sm:text-base text-[#a64d79] mb-4 leading-7">
+            <p className="text-[15px] sm:text-base text-primary mb-4 leading-7">
               {usps[activeIndex].description}
             </p>
             <Link
               to="/collections/dresses"
               className={[
                 buttonVariants?.({ variant: "default" }) ?? "",
-                "rounded-full bg-[#a64d79] hover:bg-[#94456d] text-white px-5 py-2",
+                "rounded-full bg-primary hover:bg-primary/90 text-white px-5 py-2",
                 "uppercase tracking-[0.08em] text-[12px] sm:text-[13px]",
                 "shadow-[0_8px_22px_rgba(166,77,121,0.25)] hover:shadow-[0_12px_28px_rgba(166,77,121,0.30)]",
                 "transition-all inline-flex items-center gap-2",

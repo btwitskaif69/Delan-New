@@ -1,90 +1,58 @@
-// src/components/StickyNav.jsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-
-const NAV_ITEMS = [
-  { label: "Categories",   targetId: "categories-section" },
-  { label: "Bestsellers",  targetId: "top-products-section" },
-  { label: "Trousers",     targetId: "trousers-section" },
-  { label: "Short Dress",  targetId: "short-dresses-section" },
-  { label: "Maxi & Midi",  targetId: "maxi-midi-dress-section" },
-  { label: "Co-ords",      targetId: "co-ords-section" },
-  { label: "Reviews",      targetId: "reviews-section" },
-];
 
 const BRAND = "#642c44";
 
-export default function StickyNav({
-  headerHeight = 64,  // your fixed site header height
-  stickyGap = 60,     // visual gap below the header
-  extraOffset = 0,    // tweak if you need a bit more/less
-}) {
-  const [active, setActive] = useState(NAV_ITEMS[0]?.targetId);
-  const navRef = useRef(null);
+/** Default nav tabs (no 'Reviews') */
+export const DEFAULT_NAV_ITEMS = [
+  { key: "categories",  label: "Categories",  mode: "collections" }, // special: shows collections
+  { key: "bestsellers", label: "Bestsellers", handle: "bestsellers" },
+  { key: "trousers",    label: "Trousers",    handle: "trousers" },
+  { key: "short-dress",       label: "Short Dress", handle: "short-dresses" },
+  { key: "maxi-midi",   label: "Maxi & Midi", handle: "maxi-midi-dress" },
+  { key: "co-ords",     label: "Co-ords",     handle: "co-ords" },
+];
 
-  const vars = useMemo(
-    () => ({
-      "--header-height": `${headerHeight}px`,
-      "--sticky-gap": `${stickyGap}px`,
-    }),
-    [headerHeight, stickyGap]
+export default function StickyNav({
+  items = DEFAULT_NAV_ITEMS,
+  value,                // controlled active key (optional)
+  defaultValue,         // uncontrolled initial key
+  onChange,             // (item) => void
+  className = "",
+  headerHeight = 64,    // if you make this sticky under a fixed header
+  sticky = true,        // keep it sticky at top
+}) {
+  const [internal, setInternal] = useState(
+    value ?? defaultValue ?? (items[0]?.key ?? "")
   );
 
-  const scrollToId = (id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const navH = navRef.current?.offsetHeight ?? 0;
-    const totalOffset = headerHeight + stickyGap + navH + extraOffset;
-    const y =
-      el.getBoundingClientRect().top + window.scrollY - Math.max(0, totalOffset);
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
+  const activeKey = value ?? internal;
 
-  useEffect(() => {
-    const sections = NAV_ITEMS
-      .map((n) => document.getElementById(n.targetId))
-      .filter(Boolean);
-
-    if (!sections.length) return;
-
-    const navH = navRef.current?.offsetHeight ?? 0;
-    const topOffset = headerHeight + stickyGap + navH;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      {
-        root: null,
-        rootMargin: `-${topOffset + 8}px 0px -60% 0px`,
-        threshold: 0.01,
-      }
-    );
-
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, [headerHeight, stickyGap]);
+  const rootStyle = useMemo(
+    () => (sticky ? {top: `${headerHeight}px`, zIndex: 30 } : undefined),
+    [sticky, headerHeight]
+  );
 
   return (
     <nav
-      ref={navRef}
-      className="  w-full border-b
-        bg-white py-6"
-
+      className={`w-full border-b bg-white ${className}`}
       aria-label="Section navigation"
+      style={rootStyle}
     >
-      <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-2 px-3 py-3">
-        {NAV_ITEMS.map((item) => {
-          const isActive = active === item.targetId;
+      <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-2 px-3 py-4">
+        {items.map((item) => {
+          const isActive = activeKey === item.key;
           return (
             <Button
-              key={item.targetId}
+              key={item.key}
               type="button"
-              onClick={() => scrollToId(item.targetId)}
+              onClick={() => {
+                if (!value) setInternal(item.key);
+                onChange?.(item); // bubble up the selected tab (mode/handle/label)
+              }}
               size="sm"
               variant={isActive ? "default" : "outline"}
+              aria-current={isActive ? "true" : "false"}
               className="rounded-md whitespace-nowrap transition-colors"
               style={
                 isActive

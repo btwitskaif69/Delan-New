@@ -93,7 +93,7 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
   return (
     <section className="bg-accent px-[5%] py-12">
       <header className="mx-auto mb-5 max-w-[1200px]">
-        <h2 className="cormorant-garamond-700 text-center text-3xl md:text-4xl lg:text-5xl uppercase text-primary">
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           DESIGNED FOR YOUR TRUE STYLE
         </h2>
         <p className="font-secondary mt-1 text-xl text-primary text-center">

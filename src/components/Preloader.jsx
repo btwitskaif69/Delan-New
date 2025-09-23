@@ -4,26 +4,26 @@ import { Button } from "@/components/ui/button";
 import preloader from "@/assets/videos/intro_viddd.mp4";
 
 /**
- * Preloader
- * - Fast render (poster/solid bg), blocks app behind it.
- * - Reliable "Tap/Click to Start" overlay (works on iOS Safari).
- * - Pointer + keyboard accessible (Space/Enter).
- * - Video stays inline (no forced fullscreen on iOS).
- * - Skip button while playing.
+ * Preloader (with cursor-following hint bubble)
+ * - Works on iOS Safari (inline, trusted gesture via overlay onPointerDown).
+ * - Keeps your original cursor-following "Click/Tap to Start" hint.
+ * - Keyboard accessible (Enter/Space).
+ * - Skip button while playing (unchanged).
  */
 export default function Preloader({
   onVideoEnd,
-  hintText = "Tap to start",
-  poster,             // optional poster image URL for instant paint
-  allowSkip = true,   // show/enable "Skip" button
-  autoHideOnEnd = true
+  hintText = "Click To Start",
+  poster,             // optional poster image
+  allowSkip = true,
+  autoHideOnEnd = true,
 }) {
   const videoRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
+  const [ready, setReady] = useState(false);
   const [isCoarse, setIsCoarse] = useState(false); // touch devices
-  const [ready, setReady] = useState(false);       // video metadata loaded
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  // Detect coarse pointer (mobile/touch)
+  // Detect coarse pointer (touch devices => hide the cursor-following hint)
   useEffect(() => {
     try {
       const mq = window.matchMedia("(hover: none) and (pointer: coarse)");
@@ -36,15 +36,14 @@ export default function Preloader({
 
   // Lock page scroll while preloader is visible
   useEffect(() => {
-    const { body } = document;
-    const prev = body.style.overflow;
-    body.style.overflow = "hidden";
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      body.style.overflow = prev;
+      document.body.style.overflow = prev;
     };
   }, []);
 
-  // Ensure iOS inline playback + muted set before any load
+  // Ensure inline playback + muted set before any load (iOS quirk)
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -52,33 +51,27 @@ export default function Preloader({
       v.muted = true;
       v.setAttribute("playsinline", "true");
       v.setAttribute("webkit-playsinline", "true");
-      v.setAttribute("x5-playsinline", "true"); // some Android browsers
+      v.setAttribute("x5-playsinline", "true");
       v.disablePictureInPicture = true;
       v.preload = "auto";
-      // Force a load so poster/first frame is known quickly
-      // (especially helpful on Safari with poster)
-      v.load?.();
+      v.load?.(); // nudge Safari to fetch metadata/poster early
     } catch {}
   }, []);
 
-  // Start playback from a trusted user gesture (pointerdown covers mouse & touch)
   const startPlayback = async () => {
     const v = videoRef.current;
     if (!v || hasStarted) return;
     try {
-      // re-assert muted & playsinline just in case
-      v.muted = true;
+      v.muted = true; // reassert just in case
       v.setAttribute("playsinline", "true");
       await v.play();
       setHasStarted(true);
     } catch (err) {
-      // Some Safari cases might still refuse; show a minimal fallback message in console.
       console.error("Preloader play error:", err);
     }
   };
 
   const handlePointerDown = (e) => {
-    // Ensure the overlay/button captures the gesture
     e.preventDefault();
     e.stopPropagation();
     startPlayback();
@@ -91,12 +84,16 @@ export default function Preloader({
     }
   };
 
+  const handlePointerMove = (e) => {
+    if (isCoarse) return;
+    // Use clientX/Y so the hint follows the visible pointer
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
   const handleSkip = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    try {
-      videoRef.current?.pause();
-    } catch {}
+    try { videoRef.current?.pause(); } catch {}
     onVideoEnd?.();
   };
 
@@ -107,7 +104,7 @@ export default function Preloader({
   const handleLoadedMetadata = () => setReady(true);
   const handleVideoError = (err) => {
     console.error("Video playback failed:", err);
-    // Fallback: if video can't load, immediately end preloader
+    // If video can’t load, don’t block the user
     onVideoEnd?.();
   };
 
@@ -116,14 +113,13 @@ export default function Preloader({
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black"
       role="dialog"
       aria-label="Intro video preloader"
-      // Disable long-press callout and selection on iOS Safari
       style={{
         WebkitTouchCallout: "none",
         WebkitUserSelect: "none",
         userSelect: "none",
       }}
     >
-      {/* Video (pointer-events: none so overlay receives the gestures reliably on Safari) */}
+      {/* The video itself never intercepts pointer events (Safari quirk) */}
       <video
         ref={videoRef}
         src={preloader}
@@ -140,38 +136,38 @@ export default function Preloader({
         onError={handleVideoError}
       />
 
-      {/* Center start overlay (only before playback starts) */}
+      {/* Fullscreen overlay to capture the FIRST user gesture reliably */}
       {!hasStarted && (
         <div
-          className="absolute inset-0 grid place-items-center"
-          onPointerDown={handlePointerDown}
-          onKeyDown={handleKeyDown}
+          className="absolute inset-0"
           role="button"
           tabIndex={0}
           aria-label={hintText}
+          onPointerDown={handlePointerDown}
+          onKeyDown={handleKeyDown}
+          onPointerMove={handlePointerMove}
         >
-          <div className="flex flex-col items-center gap-4 text-white">
-            {/* Subtle pulse ring for attention */}
-            <div className="relative">
-              <div className="absolute inset-0 animate-ping rounded-full bg-white/20" />
-              <button
-                type="button"
-                className="relative z-10 rounded-full bg-white/15 backdrop-blur px-6 py-3 text-base md:text-lg font-semibold border border-white/40 hover:bg-white/25 active:scale-[0.98] transition"
-              >
-                {hintText}
-              </button>
+          {/* Cursor-following hint bubble (like before) */}
+          {!isCoarse && (
+            <div
+              className="fixed z-[10000] pointer-events-none select-none text-white font-semibold rounded-full border border-white/90 px-2.5 py-1.5 whitespace-nowrap bg-white/10 backdrop-blur"
+              style={{
+                left: mousePos.x,
+                top: mousePos.y,
+                transform: "translate(14px, 14px)",
+                fontFamily:
+                  "var(--font-primary, system-ui, -apple-system, Segoe UI, Roboto)",
+                fontSize: "0.95rem",
+              }}
+            >
+              {hintText}
             </div>
-            {/* Tiny helper text; hide on coarse to reduce clutter */}
-            {!isCoarse && (
-              <p className="text-xs md:text-sm text-white/80">
-                Press <kbd className="rounded bg-white/20 px-1">Enter</kbd> to start
-              </p>
-            )}
-          </div>
+          )}
+          {/* On touch devices, no bubble (tap anywhere to start) */}
         </div>
       )}
 
-      {/* Skip button while playing */}
+      {/* Skip button while playing (unchanged) */}
       {allowSkip && hasStarted && (
         <Button
           type="button"
@@ -183,7 +179,7 @@ export default function Preloader({
         </Button>
       )}
 
-      {/* Optional lightweight ready indicator (kept minimal) */}
+      {/* Minimal “loading…” hint (optional) */}
       {!ready && (
         <div className="absolute top-5 left-1/2 -translate-x-1/2 text-white/70 text-xs">
           Loading…

@@ -6,114 +6,71 @@ import flipkart from "@/assets/logos/flipkart.svg";
 import meesho from "@/assets/logos/meesho.svg";
 import myntra from "@/assets/logos/myntra.svg";
 
+// Map each marketplace to its imported logo
 const MARKETPLACES = [
-  { src: myntra,   alt: "Myntra" },
-  { src: amazon,   alt: "Amazon" },
-  { src: flipkart, alt: "Flipkart" },
-  { src: ajio,     alt: "AJIO" },
-  { src: meesho,   alt: "Meesho" },
+  { name: "Myntra", alt: "Myntra", logo: myntra },
+  { name: "Amazon", alt: "Amazon", logo: amazon },
+  { name: "Flipkart", alt: "Flipkart", logo: flipkart },
+  { name: "AJIO", alt: "AJIO", logo: ajio },
+  { name: "Meesho", alt: "Meesho", logo: meesho },
 ];
 
-export default function AvailBanner({
-  title = "AVAILABLE ON",
-  speed = 25000,          // ms for one full cycle (lower = faster)
-  direction = "left",     // "left" or "right"
-  gap = 40,               // px gap between logos
-  logoHeight = 36,        // px height for the logos
-  className = "",
-  // gapClass is no longer needed for perfect looping, but kept for compatibility
-}) {
-  const animationDirection = direction === "right" ? "reverse" : "normal";
-
-  // Build a segment and duplicate it to guarantee identical widths (seamless loop)
-  const Segment = ({ ariaHidden = false }) => (
-    <div className="marquee-segment flex items-center" aria-hidden={ariaHidden ? "true" : undefined}>
-      {MARKETPLACES.map((m, i) => (
-        <Logo
-          key={`${m.alt}-${i}-${ariaHidden ? "dup" : "org"}`}
-          src={m.src}
-          alt={ariaHidden ? "" : m.alt}
-          height={logoHeight}
-          gap={gap}
-        />
-      ))}
-    </div>
-  );
-
+const AvailBanner = () => {
   return (
-    <section
-      className={`relative overflow-hidden bg-accent py-6 ${className}`}
-      role="region"
-      aria-label="Available on marketplaces"
-      style={{
-        // Subtle edge fade (browsers that don't support mask will ignore gracefully)
-        WebkitMaskImage:
-          "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-        maskImage:
-          "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-      }}
-    >
+    <div className="w-full bg-muted/30 py-8 overflow-hidden">
       {/* Heading */}
-      <h3 className="text-center text-primary font-secondary tracking-[0.12em] text-xs md:text-sm font-semibold">
-        {title}
-      </h3>
-
-      {/* Marquee wrapper */}
-      <div className="group relative mt-4">
-        {/* Edge overlays (for non-mask browsers & extra polish) */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 md:w-24 bg-gradient-to-r from-accent to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 md:w-24 bg-gradient-to-l from-accent to-transparent" />
-
-        {/* Track: two identical segments */}
-        <div
-          className="marquee-track flex w-max items-center will-change-transform"
-          style={{
-            animation: `marquee ${speed}ms linear infinite`,
-            animationDirection,
-          }}
-        >
-          <Segment />
-          <Segment ariaHidden />
-        </div>
+      <div className="mb-6 text-center">
+        <h2 className="cormorant-garamond-700 text-primary  text-3xl md:text-4xl lg:text-4xl">
+          AVAILABLE ON
+        </h2>
+        <p className="text-primary montserrat-60">
+          Shop from your favorite marketplaces
+        </p>
       </div>
 
-      {/* Local styles */}
-      <style>{`
-        /* Ensure each segment doesn't flex-stretch and spacing is consistent */
-        .marquee-segment { flex: 0 0 auto; }
+      {/* Marquee Container */}
+      <div className="relative">
+        {/* Fade edges for a smooth scroll effect */}
+        <div className="absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
+        <div className="absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
 
-        @keyframes marquee {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); } /* exactly one segment width */
-        }
+        {/* Continuous scroll */}
+        <div className="flex animate-marquee">
+          {/* First set of logos */}
+          <div className="flex shrink-0 items-center justify-around gap-16 px-8">
+            {MARKETPLACES.map((marketplace, index) => (
+              <div
+                key={`first-${index}`}
+                className="flex h-20 w-36 items-center justify-center"
+              >
+                <img
+                  src={marketplace.logo}
+                  alt={marketplace.alt}
+                  className="max-h-10 w-auto object-contain"
+                />
+              </div>
+            ))}
+          </div>
 
-        /* Pause on hover */
-        .group:hover .marquee-track { animation-play-state: paused; }
-
-        /* Respect reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-track { animation: none !important; transform: none !important; }
-        }
-      `}</style>
-    </section>
-  );
-}
-
-function Logo({ src, alt, height, gap }) {
-  return (
-    <div
-      className="opacity-90 transition-all hover:opacity-100"
-      style={{ marginRight: `${gap}px` }}
-    >
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        draggable="false"
-        style={{ height: `${height}px`, width: "auto" }}
-        className="object-contain"
-      />
+          {/* Duplicate set for seamless looping */}
+          <div className="flex shrink-0 items-center justify-around gap-16 px-8">
+            {MARKETPLACES.map((marketplace, index) => (
+              <div
+                key={`second-${index}`}
+                className="flex h-20 w-36 items-center justify-center"
+              >
+                <img
+                  src={marketplace.logo}
+                  alt={marketplace.alt}
+                  className="max-h-10 w-auto object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default AvailBanner;

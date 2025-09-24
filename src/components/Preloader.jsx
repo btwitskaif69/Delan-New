@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import preloader from "@/assets/videos/intro_viddd.mp4";
 
-export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
+export default function Preloader({ onVideoEnd, hintText = "Click To Start", poster }) {
   const videoRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isCoarse, setIsCoarse] = useState(false); // Hide hint on touch devices
+  const [isCoarse, setIsCoarse] = useState(false);
 
-  // Preloading video to prioritize it
+  // Detect coarse pointer once (hide mouse hint on touch)
   useEffect(() => {
     try {
       const mq = window.matchMedia("(hover: none) and (pointer: coarse)");
@@ -17,65 +17,81 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
       mq.addEventListener?.("change", update);
       return () => mq.removeEventListener?.("change", update);
     } catch {
-      // If matchMedia not available, do nothing
+      /* no-op */
     }
   }, []);
 
-  // Auto-start the video on click or touch
-  const handleScreenClick = (e) => {
-    if (videoRef.current && !hasStarted) {
-      videoRef.current
-        .play()
-        .then(() => setHasStarted(true))
-        .catch((err) => console.error("Preloader play error:", err));
+  // Try autoplay immediately (muted + playsInline allows it on most browsers)
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const tryAutoplay = async () => {
+      try {
+        await v.play();
+        setHasStarted(true);
+      } catch {
+        // Autoplay blocked — user will tap/click to start
+      }
+    };
+    tryAutoplay();
+
+    // Hard stop safety (don’t trap users if video never ends)
+    const MAX_MS = 15000; // 15s cap; adjust if your intro is shorter/longer
+    const t = setTimeout(() => onVideoEnd?.(), MAX_MS);
+    return () => clearTimeout(t);
+  }, [onVideoEnd]);
+
+  const handleScreenClick = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (!hasStarted) {
+      v.play().then(() => setHasStarted(true)).catch(() => {/* ignore */});
     }
   };
 
-  // Track mouse movement for hint positioning
   const handleMouseMove = (e) => {
-    if (!isCoarse) {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    }
+    if (!isCoarse) setMousePos({ x: e.clientX, y: e.clientY });
   };
 
-  // Handle skipping the video
   const handleSkip = (e) => {
     e.stopPropagation();
-    if (videoRef.current) videoRef.current.pause();
+    const v = videoRef.current;
+    if (v) v.pause();
     onVideoEnd && onVideoEnd();
   };
 
-  // Handling video playback errors
-  const handleVideoError = (err) => {
-    console.error("Video playback failed:", err);
-    // Fallback logic if video fails to load
+  const handleVideoError = () => {
+    // Fail open: if video cannot play, don’t block the site
+    onVideoEnd && onVideoEnd();
   };
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden cursor-pointer"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden cursor-pointer bg-black"
       onClick={handleScreenClick}
       onMouseMove={handleMouseMove}
-      onTouchStart={handleScreenClick} // Fallback for touch devices
+      onTouchStart={handleScreenClick}
       aria-label="Intro video preloader"
       role="dialog"
     >
       <video
         ref={videoRef}
         src={preloader}
-        preload="auto" // Preload the video for faster loading
+        preload="metadata"        // fast first paint; avoids large prefetch
         playsInline
-        muted={true} // Ensure muted for autoplay to work on mobile
+        muted
+        autoPlay                 // attempt silent autoplay; falls back to tap
         controls={false}
         onEnded={onVideoEnd}
         onError={handleVideoError}
+        poster={poster}          // optional fast poster
         className="h-full w-full object-cover block"
       />
 
-      {/* Cursor-following hint (hidden after start or on touch devices) */}
+      {/* Cursor-following hint (desktop only, until started) */}
       {!hasStarted && !isCoarse && (
         <div
-          className="fixed z-[10000] pointer-events-none select-none text-white font-semibold rounded-full border border-white/90 px-2.5 py-1.5 whitespace-nowrap"
+          className="fixed z-[10000] pointer-events-none select-none text-white font-semibold rounded-full border border-white/90 px-2.5 py-1.5 whitespace-nowrap bg-black/20 backdrop-blur-sm"
           style={{
             left: mousePos.x,
             top: mousePos.y,
@@ -89,7 +105,7 @@ export default function Preloader({ onVideoEnd, hintText = "Click To Start" }) {
         </div>
       )}
 
-      {/* Transparent Skip button */}
+      {/* Transparent Skip button (shows once video has started) */}
       {hasStarted && (
         <Button
           type="button"

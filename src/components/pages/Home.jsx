@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, Suspense } from "react";
 
 import HeroSection from "../home/HeroSection";
 import CategoriesSection from "../home/CategoriesSection";
@@ -7,7 +7,7 @@ import InteractiveModelSection from "../home/InteractiveModelSection";
 import StatsCounter from "../home/StatsCounter";
 import CoOrdsSection from "../home/CoOrdsSection";
 import TopProducts from "../home/TopProducts";
-import StickyNav from "../StickyNav"; // <- make sure this is the updated tab-style StickyNav
+import StickyNav from "../StickyNav";
 import TrousersSection from "../home/TrousersSection";
 import CuratedCollections from "../home/CuratedCollections";
 import Categories from "../home/Categories";
@@ -20,25 +20,31 @@ import Testimonial from "../home/Testimonial";
 import FlippingCard from "../home/FlippingCard";
 import DelanShiny from "../home/DelanShiny";
 import TrustBanner from "../TrustBanner";
-
-// Preloader overlay
-import Preloader from "@/components/Preloader";
 import AvailBanner from "../home/AvailBanner";
 import NewsLetter from "../home/NewsLetter";
 
+// 🔹 Lazy-load preloader chunk only if needed (keeps initial JS small)
+const Preloader = React.lazy(() => import("@/components/Preloader"));
+
 /** Tabs for StickyNav (no Reviews; “Categories” shows collections) */
 const NAV_TABS = [
-  { key: "categories",  label: "Categories",  mode: "collections" }, // special mode
+  { key: "categories", label: "Categories", mode: "collections" },
   { key: "back-in-stock-bestsellers", label: "Bestsellers", handle: "back-in-stock-bestsellers" },
-  { key: "trousers",    label: "Trousers",    handle: "trousers" },
-  { key: "short-dress",       label: "Short Dress", handle: "short-dress" },
-  { key: "maxi-midi",   label: "Maxi & Midi", handle: "maxi-midi-dress" },
-  { key: "co-ords",     label: "Co-ords",     handle: "co-ords" },
+  { key: "trousers", label: "Trousers", handle: "trousers" },
+  { key: "short-dress", label: "Short Dress", handle: "short-dress" },
+  { key: "maxi-midi", label: "Maxi & Midi", handle: "maxi-midi-dress" },
+  { key: "co-ords", label: "Co-ords", handle: "co-ords" },
 ];
 
 export default function Home() {
-  // --- Preloader: show every visit (your current behavior) ---
-  const [showPreloader, setShowPreloader] = useState(true);
+  // --- Show preloader only once per browser (localStorage flag) ---
+  const [showPreloader, setShowPreloader] = useState(false);
+
+  useEffect(() => {
+    // Avoid SSR mismatch: decide in effect
+    const seen = typeof window !== "undefined" && localStorage.getItem("intro_seen") === "1";
+    setShowPreloader(!seen);
+  }, []);
 
   useEffect(() => {
     if (showPreloader) document.body.classList.add("overflow-hidden");
@@ -46,18 +52,18 @@ export default function Home() {
     return () => document.body.classList.remove("overflow-hidden");
   }, [showPreloader]);
 
-  const handleEnd = () => setShowPreloader(false);
+  const handleEnd = () => {
+    try { localStorage.setItem("intro_seen", "1"); } catch { /* no-op */ }
+    setShowPreloader(false);
+  };
 
   // --- StickyNav <-> TopProducts wiring ---
-  const [activeTab, setActiveTab] = useState(NAV_TABS[0]); // default: Categories
+  const [activeTab, setActiveTab] = useState(NAV_TABS[0]);
 
-  // Compute props for TopProducts based on active tab
   const topProps = useMemo(() => {
     if (activeTab.mode === "collections") {
-      // Show a grid of collections
       return { mode: "collections", title: "Shop By Category" };
     }
-    // Show products from a specific collection handle
     return {
       mode: "products",
       handle: activeTab.handle || "top-products",
@@ -67,9 +73,13 @@ export default function Home() {
 
   return (
     <main>
-      {showPreloader && <Preloader onVideoEnd={handleEnd} hintText="Click To Start" />}
+      {showPreloader && (
+        <Suspense fallback={null}>
+          <Preloader onVideoEnd={handleEnd} hintText="Click To Start" />
+        </Suspense>
+      )}
 
-      {/* Page content (sits behind the fixed preloader) */}
+      {/* Page content (behind the fixed preloader) */}
       <HeroSection />
       <AvailBanner speed={20000} direction="right" gapClass="gap-16" />
       <CategoriesSection />
@@ -79,27 +89,21 @@ export default function Home() {
       <StatsCounter />
       <CoOrdsSection />
 
-      {/* StickyNav tabs control TopProducts (no scrolling behavior) */}
       <StickyNav
         items={NAV_TABS}
         value={activeTab.key}
-        onChange={setActiveTab}    // StickyNav will pass back the selected item object
+        onChange={setActiveTab}
         sticky
-        headerHeight={64}          // adjust if your global header height differs
+        headerHeight={64}
       />
 
-      {/* Re-render TopProducts whenever tab changes */}
       <TopProducts
-        key={`${topProps.mode}-${topProps.handle ?? "collections"}`} // force remount for clean loaders
+        key={`${topProps.mode}-${topProps.handle ?? "collections"}`}
         {...topProps}
       />
 
-      {/* The rest of your sections (optional to keep/show) */}
-      {/* <TrousersSection /> */}
       <CuratedCollections />
       <Categories />
-      {/* <ShortDressSection /> */}
-      {/* <MaxiMidi /> */}
       <UspShowcase />
       <Testimonial />
       <FlippingCard />

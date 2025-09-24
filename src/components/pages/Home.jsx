@@ -19,6 +19,7 @@ import OfferSection from "../home/OfferSection";
 import Testimonial from "../home/Testimonial";
 import FlippingCard from "../home/FlippingCard";
 import DelanShiny from "../home/DelanShiny";
+import TrustBanner from "../TrustBanner";
 
 // Preloader overlay
 import Preloader from "@/components/Preloader";
@@ -103,7 +104,7 @@ export default function Home() {
       <Testimonial />
       <FlippingCard />
       <NewsLetter />
-
+      <TrustBanner />
       <DelanShiny />
     </main>
   );

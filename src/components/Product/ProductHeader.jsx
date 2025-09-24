@@ -1,8 +1,16 @@
 // src/components/product/ProductHeader.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { useParams } from "react-router-dom";
 import { shopify } from "@/lib/shopify";
 import InstagramCircles from "./InstagramCircles";
+import { Copy, Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /* ---------------- Shopify query (no Apollo) ---------------- */
 const GET_PRODUCT_BY_HANDLE = `
@@ -43,67 +51,139 @@ const GET_PRODUCT_BY_HANDLE = `
 `;
 
 /* ---------------- static coupons from screenshot ------------- */
-/* Feel free to edit the copy/colors here */
-const STATIC_COUPONS = [
+export const DEFAULT_COUPONS = [
   {
-    code: "88BSOE65RGH9",
-    text: "20% off Cotton Products",
-    bg: "rgba(100,44,68,0.08)",
-    fg: "var(--brand-642, #642c44)",
+    code: "FIRSTBLISS",
+    title: "Flat 10% off on order on first purchase, up to Rs.500",
+    subtitle: "Save Rs. 140 | applicable only for new users",
   },
-  {
-    code: "C8KRF1G9PCDJ",
-    text: "Free shipping on all products • For all countries",
-    bg: "rgba(100,44,68,0.06)",
-    fg: "var(--brand-642, #642c44)",
-  },
-  {
-    code: "4B5P1ZFT3XN1",
-    text: "Free shipping on all products • For all countries",
-    bg: "rgba(100,44,68,0.06)",
-    fg: "var(--brand-642, #642c44)",
-  },
+  { code: "88BSOE65RGH9", text: "20% off Cotton Products" },
+  { code: "C8KRF1G9PCDJ", text: "Free shipping on all products • For all countries" },
+  { code: "4B5P1ZFT3XN1", text: "Free shipping on all products • For all countries" },
 ];
 
-/* Small list that renders the static coupons with a Copy button */
-function StaticCoupons({ coupons = STATIC_COUPONS }) {
-  const [copied, setCopied] = useState("");
+/* ---- individual coupon ticket ---- */
+function CouponTicket({ coupon, onCopy, copied }) {
+  const title = coupon.title || coupon.text || "";
+  const subtitle =
+    coupon.subtitle || coupon.subtext || `Use code ${coupon.code} at checkout`;
 
-  const copy = async (code) => {
+  return (
+    <div className="relative shrink-0 snap-center basis-[92%] sm:basis-[480px]">
+      {/* Ticket body */}
+      <div className="relative rounded-2xl border-2 border-dashed border-emerald-500 overflow-hidden">
+        {/* Side notches */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-background"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-background"
+        />
+
+        {/* Top row: bold offer */}
+        <div className="px-4 sm:px-5 py-3">
+          <p className="text-[13px] sm:text-sm font-semibold text-foreground">
+            {title}
+          </p>
+        </div>
+
+        {/* Bottom row: pale green band w/ code on the right */}
+        <div className="bg-gradient-to-r from-emerald-50 to-emerald-100/70 px-4 sm:px-5 py-3">
+          <div className="grid grid-cols-[1fr_auto] items-center gap-3">
+            <p className="text-[12px] sm:text-[13px] text-foreground/80">
+              {subtitle}
+            </p>
+
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onCopy(coupon.code)}
+              className="h-8 px-3 rounded-md border border-emerald-600/70 text-[12px] font-semibold tracking-wider text-emerald-800 hover:bg-emerald-100/70"
+              aria-label={`Copy coupon code ${coupon.code}`}
+              title="Copy code"
+            >
+              <span className="mr-2">
+                {copied ? <Check size={14} /> : <Copy size={14} />}
+              </span>
+              {copied ? "Copied" : coupon.code}
+            </Button>
+          </div>
+        </div>
+
+        {/* Subtle divider */}
+        <div className="absolute left-4 right-4 top-[44px] border-t border-dashed border-emerald-400/60" />
+      </div>
+    </div>
+  );
+}
+
+/* ---- carousel wrapper (named export) ---- */
+export function CouponCarousel({ coupons = DEFAULT_COUPONS }) {
+  const [copiedCode, setCopiedCode] = useState("");
+  const trackRef = useRef(null);
+
+  const items = useMemo(
+    () => (coupons || []).map((c) => ({ ...c, title: c.title || c.text || "" })),
+    [coupons]
+  );
+
+  const copy = useCallback(async (code) => {
     try {
       await navigator.clipboard.writeText(code);
-      setCopied(code);
-      setTimeout(() => setCopied(""), 1400);
+      setCopiedCode(code);
+      setTimeout(() => setCopiedCode(""), 1400);
     } catch {
-      // no-op
+      // ignore
     }
+  }, []);
+
+  const scrollBy = (dir = 1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const amount = Math.round(el.clientWidth * 0.9) * dir;
+    el.scrollBy({ left: amount, behavior: "smooth" });
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      {coupons.map((c, i) => (
-        <div
-          key={c.code + i}
-          className="w-full rounded-lg px-4 sm:px-5 py-3 sm:py-4"
-          style={{ backgroundColor: c.bg, color: c.fg }}
-        >
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
-            <p className="text-[13px] sm:text-[14px] font-medium text-current text-center sm:text-left">
-              {c.text}
-            </p>
+    <div className="relative">
+      <div
+        ref={trackRef}
+        className="flex gap-3 sm:gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-1 no-scrollbar"
+      >
+        {items.map((c) => (
+          <CouponTicket
+            key={c.code}
+            coupon={c}
+            onCopy={copy}
+            copied={copiedCode === c.code}
+          />
+        ))}
+      </div>
 
-            <button
-              type="button"
-              onClick={() => copy(c.code)}
-              className="inline-flex items-center rounded-full border border-current px-3 py-1 text-xs sm:text-[13px] font-semibold hover:opacity-90"
-              aria-label={`Copy code ${c.code}`}
-              title="Copy code"
-            >
-              {copied === c.code ? "Copied!" : c.code}
-            </button>
-          </div>
-        </div>
-      ))}
+      <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between">
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          className="pointer-events-auto ml-1 sm:ml-2 rounded-full shadow-md"
+          onClick={() => scrollBy(-1)}
+          aria-label="Previous"
+        >
+          <ChevronLeft />
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          className="pointer-events-auto mr-1 sm:mr-2 rounded-full shadow-md"
+          onClick={() => scrollBy(1)}
+          aria-label="Next"
+        >
+          <ChevronRight />
+        </Button>
+      </div>
     </div>
   );
 }
@@ -131,6 +211,7 @@ function pickVariant(product, selectedOptions) {
 }
 
 /* ------------------------------------------------------------------ */
+/* The only default export in this module */
 export default function ProductHeader({ handle: handleProp, onAddToCart }) {
   const { handle: handleFromRoute } = useParams();
   const handle = handleProp ?? handleFromRoute;
@@ -183,7 +264,9 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [handle]);
 
   /* recompute selection */
@@ -206,11 +289,16 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
     );
     let reviews = [];
     if (mf?.value) {
-      try { reviews = JSON.parse(mf.value)?.reviews || []; } catch {}
+      try {
+        reviews = JSON.parse(mf.value)?.reviews || [];
+      } catch {}
     }
     const approved = reviews.filter((r) => r?.status === "approved");
     const avg = approved.length
-      ? (approved.reduce((s, r) => s + Number(r?.rate || 0), 0) / approved.length).toFixed(1)
+      ? (
+          approved.reduce((s, r) => s + Number(r?.rate || 0), 0) /
+          approved.length
+        ).toFixed(1)
       : null;
     return { approvedReviews: approved, avgRating: avg };
   }, [product]);
@@ -266,7 +354,6 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
       <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
         {/* LEFT: Gallery */}
         <div className="md:pl-2">
-          {/* md+: thumbs LEFT of main image */}
           <div className="flex gap-3 sm:gap-4">
             <div className="hidden md:flex md:flex-col md:gap-3 shrink-0">
               {images.map((img, i) => {
@@ -339,10 +426,9 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
           </div>
         </div>
 
-        {/* RIGHT: Header (sticky on large) */}
+        {/* RIGHT: Header */}
         <div className="md:pr-2 lg:sticky lg:top-8">
           <section className="space-y-5 sm:space-y-6">
-            {/* Title + subtitle */}
             <div>
               <h1
                 className="
@@ -353,7 +439,7 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
               >
                 {product.title}
               </h1>
-              <p className="mt-1 text-sm sm:text-base text-muted-foreground montser">
+              <p className="mt-1 text-sm sm:text-base text-muted-foreground">
                 Designed for Timeless Elegance
               </p>
             </div>
@@ -377,12 +463,19 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
               <div className="hidden h-5 w-px bg-border sm:block" />
 
               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <svg width="16" height="16" viewBox="0 0 24 24" className="translate-y-[1px]" fill="#f6c343">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  className="translate-y-[1px]"
+                  fill="#f6c343"
+                >
                   <path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                 </svg>
                 {avgRating ? (
                   <span>
-                    {avgRating}/5 ({approvedReviews.length} {approvedReviews.length === 1 ? "review" : "reviews"})
+                    {avgRating}/5 ({approvedReviews.length}{" "}
+                    {approvedReviews.length === 1 ? "review" : "reviews"})
                   </span>
                 ) : (
                   <span>No reviews yet</span>
@@ -390,7 +483,6 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
               </div>
             </div>
 
-            {/* Divider */}
             <div className="h-px w-full bg-border" />
 
             {/* Options */}
@@ -494,8 +586,8 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
                 </button>
               </div>
 
-              {/* 🔥 Static coupon list with copy buttons */}
-              <StaticCoupons />
+              {/* Ticket-style coupons */}
+              <CouponCarousel coupons={DEFAULT_COUPONS} />
 
               <InstagramCircles />
             </div>

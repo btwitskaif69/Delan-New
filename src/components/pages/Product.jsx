@@ -7,6 +7,7 @@ import RecentlyViewed from '../Product/RecentlyViewed'
 import ProductUSP from '../Product/ProductUSP'
 import ProducrReview from '../Product/ProductReview'
 import DelanShiny from '../home/DelanShiny'
+import TrustBanner from '../TrustBanner'
 
 const Product = () => {
   return (
@@ -18,6 +19,7 @@ const Product = () => {
         <RecentlyViewed/>
         <ProductUSP/>
         <ProducrReview/>
+        <TrustBanner/>
         <DelanShiny/>
     </main>
   )

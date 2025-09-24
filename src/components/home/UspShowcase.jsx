@@ -10,45 +10,35 @@ import Elegant from "@/assets/images/44.png";
 import Comfort from "@/assets/images/55.png";
 
 export default function UspShowcase() {
-  /** Scroll-tracked container (not the header) */
-  const scrollRef = useRef/** @type {React.MutableRefObject<HTMLDivElement|null>} */(null);
+  const sectionRef = useRef/** @type {React.MutableRefObject<HTMLElement|null>} */(null);
+  const scrollRef  = useRef/** @type {React.MutableRefObject<HTMLDivElement|null>} */(null);
+  const headRef    = useRef/** @type {React.MutableRefObject<HTMLElement|null>} */(null);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [headH, setHeadH] = useState(0);   // measured header height
+  const [fixed, setFixed] = useState(false); // show fixed overlay header
+  const NAV_OFFSET = 0; // set to your fixed navbar height if you have one (e.g., 64)
 
   const usps = [
-    {
-      title: "Crafted from 100% natural fabrics",
-      description:
-        "Experience the pure comfort and breathability of materials sourced directly from nature, ensuring a soft touch on your skin and a clear conscience.",
-      image: Crafted,
-    },
-    {
-      title: "Uncompromised quality at fair prices",
-      description:
-        "We believe luxury should be accessible. Our direct-to-consumer model eliminates middlemen, allowing us to offer premium garments without the premium price tag.",
-      image: Uncompromised,
-    },
-    {
-      title: "Sustainable fashion for conscious living",
-      description:
-        "From ethical sourcing to eco-friendly packaging, every step of our process is designed to minimize our environmental footprint and promote a healthier planet.",
-      image: Sustainable,
-    },
-    {
-      title: "Elegant designs, timeless everyday wear",
-      description:
-        "Our collections are thoughtfully designed to be both beautiful and versatile, creating staple pieces that you will cherish and wear for years to come.",
-      image: Elegant,
-    },
-    {
-      title: "Comfort, style, and responsibility combined",
-      description:
-        "You no longer have to choose. Our brand is a promise of clothing that looks good, feels good, and does good for the world.",
-      image: Comfort,
-    },
+    { title: "Crafted from 100% natural fabrics",
+      description: "Experience the pure comfort and breathability of materials sourced directly from nature, ensuring a soft touch on your skin and a clear conscience.",
+      image: Crafted },
+    { title: "Uncompromised quality at fair prices",
+      description: "We believe luxury should be accessible. Our direct-to-consumer model eliminates middlemen, allowing us to offer premium garments without the premium price tag.",
+      image: Uncompromised },
+    { title: "Sustainable fashion for conscious living",
+      description: "From ethical sourcing to eco-friendly packaging, every step of our process is designed to minimize our environmental footprint and promote a healthier planet.",
+      image: Sustainable },
+    { title: "Elegant designs, timeless everyday wear",
+      description: "Our collections are thoughtfully designed to be both beautiful and versatile, creating staple pieces that you will cherish and wear for years to come.",
+      image: Elegant },
+    { title: "Comfort, style, and responsibility combined",
+      description: "You no longer have to choose. Our brand is a promise of clothing that looks good, feels good, and does good for the world.",
+      image: Comfort },
   ];
 
-  // Track viewport for mobile tweaks
+  // Mobile breakpoint watcher
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
     const apply = () => setIsMobile(mq.matches);
@@ -57,27 +47,48 @@ export default function UspShowcase() {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  // Scroll-driven step detection (based on the inner scrolly container)
+  // Measure the flow header height
+  useEffect(() => {
+    const el = headRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setHeadH(el.offsetHeight || 0));
+    ro.observe(el);
+    setHeadH(el.offsetHeight || 0);
+    const onResize = () => setHeadH(el.offsetHeight || 0);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => { ro.disconnect(); window.removeEventListener("resize", onResize); };
+  }, []);
+
+  // Toggle fixed overlay header while the section is in view
+  useEffect(() => {
+    const onScroll = () => {
+      const sec = sectionRef.current;
+      if (!sec) return;
+      const rect = sec.getBoundingClientRect();
+      // Fix when top reaches the viewport top (minus NAV_OFFSET) and until bottom passes that line
+      const shouldFix = rect.top <= NAV_OFFSET && rect.bottom - headH > NAV_OFFSET;
+      setFixed(shouldFix);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [headH]);
+
+  // Scroll-driven step detection
   useEffect(() => {
     const handleScroll = () => {
       const node = scrollRef.current;
       if (!node) return;
-
       const rect = node.getBoundingClientRect();
       const height = rect.height;
       const scrollOffset = window.innerHeight * 0.5;
       const scrollPosition = window.scrollY + scrollOffset;
       const componentTop = node.offsetTop;
-
       const progress = scrollPosition - componentTop;
       const sectionHeight = height / usps.length;
-      const idx = Math.min(
-        usps.length - 1,
-        Math.max(0, Math.floor(progress / sectionHeight))
-      );
+      const idx = Math.min(usps.length - 1, Math.max(0, Math.floor(progress / sectionHeight)));
       setActiveIndex(idx);
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
@@ -87,65 +98,55 @@ export default function UspShowcase() {
     const total = usps.length;
     const relativeIndex = (index - activeIndex + total) % total;
 
-    // On mobile: show only the active image; hide others
     if (isMobile) {
       return relativeIndex === 0
         ? { opacity: 1, transform: "scale(1)", zIndex: 10 }
         : { opacity: 0, transform: "scale(0.9)", zIndex: 0 };
     }
-
-    // Desktop layering
     if (relativeIndex === 0) {
-      return {
-        opacity: 1,
-        transform: "translate(0, 0) scale(1)",
-        zIndex: 30,
-        filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.25))",
-      };
+      return { opacity: 1, transform: "translate(0,0) scale(1)", zIndex: 30, filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.25))" };
     } else if (relativeIndex === 1) {
-      return {
-        opacity: 0.75,
-        transform: "translate(-110px, 150px) scale(0.82)",
-        zIndex: 20,
-        filter: "blur(2px)",
-      };
+      return { opacity: 0.75, transform: "translate(-110px, 150px) scale(0.82)", zIndex: 20, filter: "blur(2px)" };
     } else if (relativeIndex === usps.length - 1) {
-      return {
-        opacity: 0.55,
-        transform: "translate(-110px, -150px) scale(0.82)",
-        zIndex: 10,
-        filter: "blur(3px)",
-      };
+      return { opacity: 0.55, transform: "translate(-110px, -150px) scale(0.82)", zIndex: 10, filter: "blur(3px)" };
     }
     return { opacity: 0, transform: "scale(0.7)", zIndex: 0 };
   };
 
   return (
-    <section className="bg-white font-[var(--font-primary)]">
-      {/* Centered top heading */}
-      <header className="px-4 md:px-[5%] pt-12 md:pt-16 pb-6 md:pb-10 text-center">
-        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
+    <section ref={sectionRef} className="bg-white font-[var(--font-primary)]">
+      {/* 1) Flow header (keeps layout). Hidden when fixed overlay is shown. */}
+      <header
+        ref={headRef}
+        className="px-4 md:px-[5%] pt-4 pb-3 text-center"
+        aria-label="USP Section Heading"
+        style={{ visibility: fixed ? "hidden" : "visible" }}
+      >
+        <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           Crafted with Purpose
         </h2>
       </header>
 
-      {/* Scrolly content (images + text panels) */}
-      <div
-        ref={scrollRef}
-        className="
-          flex flex-col md:flex-row
-          min-h-[100vh] md:min-h-[350vh]
-        "
-      >
+      {/* 2) Fixed overlay header (never moves while inside the section) */}
+{fixed && (
+  <div className="fixed left-0 w-full pointer-events-none" style={{ top: NAV_OFFSET }} aria-hidden="true">
+    <div className="px-4 md:px-[5%] pt-4 pb-3 text-center">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
+        Crafted with Purpose
+      </h2>
+    </div>
+  </div>
+)}
+
+      {/* Scrolly content */}
+      <div ref={scrollRef} className="flex flex-col md:flex-row min-h-[100vh] md:min-h-[350vh]">
         {/* Images panel */}
         <div
-          className="
-            w-full md:w-1/2
-            md:sticky md:top-0
-            h-[56vh] md:h-screen
-            flex items-center justify-center
-            overflow-hidden px-4 md:px-0
-          "
+          className="w-full md:w-1/2 md:sticky flex items-center justify-center overflow-hidden px-4 md:px-0 z-10"
+          style={{
+            top: headH + NAV_OFFSET,
+            height: isMobile ? "56vh" : `calc(100vh - ${headH + NAV_OFFSET}px)`,
+          }}
         >
           <div className="relative w-full h-full flex items-center justify-center">
             {usps.map((usp, i) => (
@@ -154,11 +155,7 @@ export default function UspShowcase() {
                 src={usp.image}
                 alt={usp.title}
                 loading="lazy"
-                className="
-                  absolute object-contain
-                  transition-all duration-700 ease-in-out
-                  max-w-[85%] md:max-w-[60%]
-                "
+                className="absolute object-contain transition-all duration-700 ease-in-out max-w-[85%] md:max-w-[60%]"
                 style={imageStyleFor(i)}
                 draggable="false"
               />
@@ -168,27 +165,20 @@ export default function UspShowcase() {
 
         {/* Text panel */}
         <div
-          className="
-            w-full md:w-1/2
-            md:sticky md:top-0
-            h-auto md:h-screen
-            flex flex-col
-            justify-start
-            px-4 md:px-0
-            pt-8 md:pt-[22vh]
-            pb-12 md:pb-10
-          "
+          className="w-full md:w-1/2 md:sticky flex flex-col justify-start px-4 md:px-0 pt-8 md:pt-[12vh] pb-12 md:pb-10 z-10"
+          style={{
+            top: headH + NAV_OFFSET,
+            height: isMobile ? "auto" : `calc(100vh - ${headH + NAV_OFFSET}px)`,
+          }}
         >
-          {/* Desktop: layered absolute slides */}
+          {/* Desktop layered slides */}
           <div className="relative hidden md:block max-w-[520px] pr-20 flex-1 leading-relaxed">
             {usps.map((usp, i) => (
               <div
                 key={i}
                 className={[
                   "absolute w-[420px] transition-all duration-500",
-                  i === activeIndex
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-5",
+                  i === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
                 ].join(" ")}
               >
                 <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4 whitespace-normal">
@@ -197,7 +187,6 @@ export default function UspShowcase() {
                 <p className="text-base lg:text-xl text-primary mb-5 leading-7 lg:leading-8">
                   {usp.description}
                 </p>
-
                 <Link
                   to="/collections/dresses"
                   className={[
@@ -214,7 +203,7 @@ export default function UspShowcase() {
             ))}
           </div>
 
-          {/* Mobile/Tablet: single active slide in normal flow */}
+          {/* Mobile slide */}
           <div className="md:hidden max-w-[720px] mx-auto leading-relaxed">
             <h3 className="text-2xl sm:text-3xl font-semibold mb-3">
               {usps[activeIndex].title}

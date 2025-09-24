@@ -499,22 +499,30 @@ export const GET_PRODUCT_REVIEWS = /* GraphQL */ `
   }
 `;
 
-// Newsletter signup via Storefront API (password is REQUIRED)
 export const NEWSLETTER_SIGNUP = /* GraphQL */ `
-  mutation newsletterSignup(
+  mutation NewsletterSignup(
     $email: String!
-    $acceptsMarketing: Boolean!
     $password: String!
+    $acceptsMarketing: Boolean!
+    $phone: String
   ) {
-    customerCreate(
-      input: {
-        email: $email
-        acceptsMarketing: $acceptsMarketing
-        password: $password
+    customerCreate(input: {
+      email: $email
+      password: $password
+      acceptsMarketing: $acceptsMarketing
+      phone: $phone
+    }) {
+      customer {
+        id
+        email
+        phone
+        acceptsMarketing
       }
-    ) {
-      customer { id email acceptsMarketing }
-      customerUserErrors { field message code }
+      customerUserErrors {
+        code
+        field
+        message
+      }
     }
   }
 `;

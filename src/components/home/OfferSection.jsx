@@ -69,6 +69,16 @@ export default function OfferSection() {
         const img = node.images?.edges?.[0]?.node;
         const variants = node.variants?.edges?.map(e => e.node) ?? [];
 
+        // ✅ Parse rating like your other component
+        let ratingValue = 0;
+        if (node.rating?.value) {
+          try {
+            const parsed = JSON.parse(node.rating.value);
+            ratingValue = Number.parseFloat(parsed?.value ?? 0) || 0;
+          } catch {}
+        }
+
+        // Find best discount among variants
         let best = null;
         for (const v of variants) {
           const price = Number.parseFloat(v?.price?.amount ?? "0");
@@ -89,14 +99,13 @@ export default function OfferSection() {
         }
         if (!best) return null;
 
-        let ratingValue = 0;
         return {
           id: node.id,
           title: node.title,
           handle: node.handle,
           imageUrl: img?.url ?? "https://via.placeholder.com/600x800",
           altText: img?.altText || node.title,
-          ratingValue,
+          ratingValue, // ✅ keep it
           ...best,
         };
       })
@@ -273,11 +282,8 @@ export default function OfferSection() {
                           </span>
                         </div>
 
-                        {product.ratingValue > 0 ? (
-                          <Stars value={product.ratingValue} />
-                        ) : (
-                          <div className="h-5" aria-hidden="true" />
-                        )}
+                        {/* ✅ Always render stars (shows ☆☆☆☆☆ when 0) */}
+                        <Stars value={product.ratingValue} />
 
                         {/* Add to Cart */}
                         <div className="w-full mt-1.5 flex justify-center items-center pb-3">
@@ -313,7 +319,6 @@ export default function OfferSection() {
           })}
         </CarouselContent>
 
-        {/* Show arrows only if there are multiple slides */}
         {discountedProducts.length > 1 && (
           <>
             <CarouselPrevious className="left-[-14px] h-10 w-10 rounded-full border-black/35 text-black/60 hover:bg-[color:var(--brand-642,#642c44)] hover:text-white hover:border-[color:var(--brand-642,#642c44)]" />

@@ -330,7 +330,9 @@ export const GET_OFFER_PRODUCTS = /* GraphQL */ `
           id
           title
           handle
-          images(first: 1) {
+
+          # fetch 2 if you might crossfade on hover (optional here)
+          images(first: 2) {
             edges {
               node {
                 url
@@ -338,6 +340,8 @@ export const GET_OFFER_PRODUCTS = /* GraphQL */ `
               }
             }
           }
+
+          # keep variants so we can compute discounts client-side
           variants(first: 10) {
             edges {
               node {
@@ -348,11 +352,17 @@ export const GET_OFFER_PRODUCTS = /* GraphQL */ `
               }
             }
           }
+
+          # ⭐ add rating metafield (adjust namespace/key to your setup)
+          rating: metafield(namespace: "reviews", key: "rating") {
+            value
+          }
         }
       }
     }
   }
 `;
+
 // OPTIONAL: If you have a "sale" collection handle in your store
 export const GET_SALE_COLLECTION_PRODUCTS = /* GraphQL */ `
   query getSaleCollectionProducts($handle: String!, $first: Int!) {

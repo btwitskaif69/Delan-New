@@ -23,6 +23,7 @@ import DelanShiny from "../home/DelanShiny";
 // Preloader overlay
 import Preloader from "@/components/Preloader";
 import AvailBanner from "../home/AvailBanner";
+import NewsLetter from "../home/NewsLetter";
 
 /** Tabs for StickyNav (no Reviews; “Categories” shows collections) */
 const NAV_TABS = [
@@ -101,6 +102,8 @@ export default function Home() {
       <UspShowcase />
       <Testimonial />
       <FlippingCard />
+      <NewsLetter />
+
       <DelanShiny />
     </main>
   );

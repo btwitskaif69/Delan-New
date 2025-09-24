@@ -14,13 +14,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Logo & Tagline */}
         <div className="flex flex-col space-y-4 md:col-span-1">
-          <Link to="/" className="inline-block">
-            <img
-              src={logo}
-              alt="DELAN brand logo"
-              className="w-40 h-auto"
-            />
-          </Link>
+
           <p className="text-base leading-relaxed montserrat-500">
             Delan delivers everyday luxury through timeless essentials crafted for modern comfort, lasting quality, and effortless versatility.
           </p>
@@ -34,6 +28,8 @@ const Footer = () => {
             <li><Link to="/returns-exchange" className="hover:text-primary/90">Return/Exchange</Link></li>
             <li><Link to="/privacy-policy" className="hover:text-primary/90">Privacy Policy</Link></li>
             <li><Link to="/terms-conditions" className="hover:text-primary/90">Terms & Conditions</Link></li>
+            <li><Link to="/terms-conditions" className="hover:text-primary/90">FAQ</Link></li>
+
           </ul>
         </div>
 

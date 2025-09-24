@@ -13,23 +13,27 @@ const DelanShiny = () => {
           max-w-[1400px] mx-auto
           min-h-[30vh]
           px-4 sm:px-6 lg:px-10
-          flex flex-col items-center justify-center
-          gap-6 sm:gap-7 lg:gap-8
+          grid place-items-center
           text-center
         "
       >
+        <img
+          src={logo}
+          alt="DELAN brand logo"
+          className="w-40 h-auto mx-auto block"
+        />
 
-        {/* Big shiny headline */}
         <ShinyText
           text="Own It #TrustYourStyle"
           disabled={false}
           speed={6}
           className="
-            custom-class
+            block mx-auto text-center
             font-semibold tracking-tight
-            leading-[2]
-            text-[clamp(2rem,8vw,7rem)]   /* responsive: 32px → ~96px */
-            mx-auto cormorant-garamond-700
+            leading-none                 /* remove extra line height */
+            text-[clamp(2rem,8vw,7rem)]
+            cormorant-garamond-700
+            -mt-1 sm:-mt-2               /* nudge closer if needed */
           "
         />
       </div>

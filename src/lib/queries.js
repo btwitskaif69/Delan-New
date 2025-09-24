@@ -20,24 +20,51 @@ export const GET_PRODUCTS = /* GraphQL */ `
   }
 `;
 
-export const GET_PRODUCT_BY_HANDLE = /* GraphQL */ `
+export const GET_PRODUCT_BY_HANDLE = `
   query getProductByHandle($handle: String!) {
     product(handle: $handle) {
       id
       title
-      descriptionHtml
       handle
-      images(first: 10) { edges { node { src altText } } }
+      descriptionHtml
+      options(first: 10) { id name values }
+      images(first: 20) { edges { node { url altText } } }
       variants(first: 50) {
         edges {
           node {
             id
             title
             availableForSale
+            sku
+            image { url altText }
             price { amount currencyCode }
+            compareAtPrice { amount currencyCode }
             selectedOptions { name value }
           }
         }
+      }
+      metafields(identifiers: [
+        { namespace: "air_reviews_product", key: "data" },
+        { namespace: "air_reviews_product", key: "review_avg" },
+        { namespace: "air_reviews_product", key: "review_count" },
+        { namespace: "promo", key: "banner" },
+        { namespace: "promo", key: "banner_text" },
+        { namespace: "promo", key: "banner_bg" },
+        { namespace: "promo", key: "banner_fg" },
+        { namespace: "promo", key: "banner_code" },
+        { namespace: "promo", key: "banner_valid_till" },
+        { namespace: "promo", key: "banner_min_amount" }
+      ]) {
+        key
+        namespace
+        type
+        value
+      }
+    }
+    shop {
+      metafield(namespace: "promo", key: "global_banner") {
+        type
+        value
       }
     }
   }
@@ -468,6 +495,26 @@ export const GET_PRODUCT_REVIEWS = /* GraphQL */ `
         namespace
         value
       }
+    }
+  }
+`;
+
+// Newsletter signup via Storefront API (password is REQUIRED)
+export const NEWSLETTER_SIGNUP = /* GraphQL */ `
+  mutation newsletterSignup(
+    $email: String!
+    $acceptsMarketing: Boolean!
+    $password: String!
+  ) {
+    customerCreate(
+      input: {
+        email: $email
+        acceptsMarketing: $acceptsMarketing
+        password: $password
+      }
+    ) {
+      customer { id email acceptsMarketing }
+      customerUserErrors { field message code }
     }
   }
 `;

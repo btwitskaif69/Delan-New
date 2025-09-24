@@ -42,6 +42,72 @@ const GET_PRODUCT_BY_HANDLE = `
   }
 `;
 
+/* ---------------- static coupons from screenshot ------------- */
+/* Feel free to edit the copy/colors here */
+const STATIC_COUPONS = [
+  {
+    code: "88BSOE65RGH9",
+    text: "20% off Cotton Products",
+    bg: "rgba(100,44,68,0.08)",
+    fg: "var(--brand-642, #642c44)",
+  },
+  {
+    code: "C8KRF1G9PCDJ",
+    text: "Free shipping on all products • For all countries",
+    bg: "rgba(100,44,68,0.06)",
+    fg: "var(--brand-642, #642c44)",
+  },
+  {
+    code: "4B5P1ZFT3XN1",
+    text: "Free shipping on all products • For all countries",
+    bg: "rgba(100,44,68,0.06)",
+    fg: "var(--brand-642, #642c44)",
+  },
+];
+
+/* Small list that renders the static coupons with a Copy button */
+function StaticCoupons({ coupons = STATIC_COUPONS }) {
+  const [copied, setCopied] = useState("");
+
+  const copy = async (code) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(code);
+      setTimeout(() => setCopied(""), 1400);
+    } catch {
+      // no-op
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      {coupons.map((c, i) => (
+        <div
+          key={c.code + i}
+          className="w-full rounded-lg px-4 sm:px-5 py-3 sm:py-4"
+          style={{ backgroundColor: c.bg, color: c.fg }}
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
+            <p className="text-[13px] sm:text-[14px] font-medium text-current text-center sm:text-left">
+              {c.text}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => copy(c.code)}
+              className="inline-flex items-center rounded-full border border-current px-3 py-1 text-xs sm:text-[13px] font-semibold hover:opacity-90"
+              aria-label={`Copy code ${c.code}`}
+              title="Copy code"
+            >
+              {copied === c.code ? "Copied!" : c.code}
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ---------------- utils ---------------- */
 const BRAND = "var(--brand-642, #642c44)";
 const first = (arr) => (Array.isArray(arr) && arr.length ? arr[0] : undefined);
@@ -174,7 +240,10 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
   }
 
   const images = edgeNodes(product.images?.edges);
-  const price = selectedVariant?.price?.amount ?? first(product.variants?.edges)?.node?.price?.amount ?? "0";
+  const price =
+    selectedVariant?.price?.amount ??
+    first(product.variants?.edges)?.node?.price?.amount ??
+    "0";
   const compareAt = selectedVariant?.compareAtPrice?.amount;
   const inStock = Boolean(selectedVariant?.availableForSale);
 
@@ -197,9 +266,8 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
       <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
         {/* LEFT: Gallery */}
         <div className="md:pl-2">
-          {/* ✅ On md+ show thumbs LEFT of main image in the same row */}
+          {/* md+: thumbs LEFT of main image */}
           <div className="flex gap-3 sm:gap-4">
-            {/* Vertical thumbnails (md+) */}
             <div className="hidden md:flex md:flex-col md:gap-3 shrink-0">
               {images.map((img, i) => {
                 const active = mainImage?.url === img.url;
@@ -243,7 +311,7 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
             </div>
           </div>
 
-          {/* ✅ On <md show horizontal thumb strip BELOW the main image */}
+          {/* <md: horizontal thumb strip */}
           <div className="mt-3 flex gap-2 sm:gap-3 md:hidden overflow-x-auto no-scrollbar">
             {images.map((img, i) => {
               const active = mainImage?.url === img.url;
@@ -426,13 +494,8 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
                 </button>
               </div>
 
-              {/* Offer banner */}
-              <div
-                className="w-full rounded-lg px-4 sm:px-5 py-3 sm:py-4 text-center text-[13px] sm:text-[14px] text-foreground/80"
-                style={{ backgroundColor: "rgba(100,44,68,0.08)" }}
-              >
-                Flat 10% off on first purchase, up to Rs.500
-              </div>
+              {/* 🔥 Static coupon list with copy buttons */}
+              <StaticCoupons />
 
               <InstagramCircles />
             </div>

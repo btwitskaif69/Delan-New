@@ -1,4 +1,3 @@
-// src/components/ProductUSP.jsx
 import React from "react";
 
 /* Keep your existing icons */
@@ -8,6 +7,7 @@ import Return from "@/assets/icons/exchange.png";
 import Fit from "@/assets/icons/fit.png";
 import Made from "@/assets/icons/made.png";
 import Secure from "@/assets/icons/secure.png";
+import Years from "@/assets/icons/25years.png";
 
 /* Default items – unchanged */
 const DEFAULT_USPS = [
@@ -17,6 +17,7 @@ const DEFAULT_USPS = [
   { icon: Return,  text: "15 Days Exchange/Return" },
   { icon: Shipping,text: "Shipping All Over India" },
   { icon: Fit,     text: "Made to Fit Indian Body" }, // extra item still shown on large screens
+  { icon: Years,   text: "25 Years of Excellence" }, // extra item still shown on large screens
 ];
 
 /**
@@ -45,19 +46,11 @@ export default function ProductUSP({
         {/* Icons row */}
         <ul
           role="list"
-          className="
-            grid items-center justify-items-center
-            grid-cols-2 gap-y-6 gap-x-6
-            sm:grid-cols-3
-            md:grid-cols-4
-            lg:grid-cols-6
-            py-6 sm:py-8
-            text-white
-          "
+          className="flex justify-center items-center py-6 sm:py-8 space-x-10 text-white"
         >
           {items.map((usp, i) => (
             <li key={i} role="listitem" className="flex flex-col items-center">
-              <div className="grid place-items-center h-12 w-12 sm:h-14 sm:w-14 mb-3">
+              <div className="grid place-items-center h-12 w-12 sm:h-15 sm:w-15 mb-3">
                 <img
                   src={usp.icon}
                   alt=""               /* decorative icon */

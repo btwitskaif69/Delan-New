@@ -9,6 +9,7 @@ import ProducrReview from '../Product/ProductReview'
 import DelanShiny from '../home/DelanShiny'
 import TrustBanner from '../TrustBanner'
 import Testimonial from '../home/Testimonial'
+import WatchAndBuy from '../home/WatchAndBuy'
 
 const Product = () => {
   return (
@@ -17,6 +18,7 @@ const Product = () => {
         <ProductHeader/>
         <WhyLoveAndDetails/>
         <SuggestionSection/>
+        <WatchAndBuy/>
         <RecentlyViewed/>
         <ProductUSP/>
         <Testimonial/>

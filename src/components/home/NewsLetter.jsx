@@ -3,13 +3,13 @@ import { shopify } from "@/lib/shopify";
 import { NEWSLETTER_SIGNUP } from "@/lib/queries";
 
 export default function NewsLetter({ className = "" }) {
-  const [email, setEmail]     = useState("");
-  const [phone, setPhone]     = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [waOptIn, setWaOptIn] = useState(true);
   const [consent, setConsent] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus]   = useState({ ok: false, msg: "" });
-  const [hp, setHp]           = useState(""); // honeypot
+  const [status, setStatus] = useState({ ok: false, msg: "" });
+  const [hp, setHp] = useState(""); // honeypot
 
   const makeRandomPassword = () => {
     try {
@@ -82,9 +82,9 @@ export default function NewsLetter({ className = "" }) {
   return (
     <section className={`w-full bg-white text-primary ${className}`}>
       <div className="mx-auto max-w-5xl px-4 sm:px-6 py-10 sm:py-14">
-        <div className="grid gap-6 sm:gap-8 md:grid-cols-3 items-center">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-3 items-start">
           {/* Copy */}
-          <div className="md:col-span-1">
+          <div className="md:col-span-1 flex flex-col justify-start">
             <h3 className="text-2xl sm:text-3xl font-semibold">Join Our Newsletter</h3>
             <p className="mt-2 text-sm sm:text-base text-primary/80">
               Style tips, early access to drops, and members-only offers. No spam—unsubscribe anytime.
@@ -122,7 +122,7 @@ export default function NewsLetter({ className = "" }) {
               </div>
 
               {/* Row 2: WhatsApp (below Email) + Submit */}
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
                 <label htmlFor="newsletter-phone" className="sr-only">WhatsApp number</label>
                 <input
                   id="newsletter-phone"

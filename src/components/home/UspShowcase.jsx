@@ -54,45 +54,42 @@ export default function UspShowcase() {
     const ro = new ResizeObserver(() => setHeadH(el.offsetHeight || 0));
     ro.observe(el);
     setHeadH(el.offsetHeight || 0);
-    const onResize = () => setHeadH(el.offsetHeight || 0);
-    window.addEventListener("resize", onResize, { passive: true });
-    return () => { ro.disconnect(); window.removeEventListener("resize", onResize); };
+    return () => ro.disconnect();
   }, []);
 
-  // Toggle fixed overlay header while the section is in view
-  useEffect(() => {
-    const onScroll = () => {
-      const sec = sectionRef.current;
-      if (!sec) return;
-      const rect = sec.getBoundingClientRect();
-      // Fix when top reaches the viewport top (minus NAV_OFFSET) and until bottom passes that line
-      const shouldFix = rect.top <= NAV_OFFSET && rect.bottom - headH > NAV_OFFSET;
-      setFixed(shouldFix);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [headH]);
-
-  // Scroll-driven step detection
+  // UPDATED: Combined scroll handler for both step detection and sticky header logic.
   useEffect(() => {
     const handleScroll = () => {
-      const node = scrollRef.current;
-      if (!node) return;
-      const rect = node.getBoundingClientRect();
-      const height = rect.height;
+      const sectionNode = sectionRef.current;
+      const scrollContentNode = scrollRef.current;
+      if (!sectionNode || !scrollContentNode) return;
+
+      // 1. Calculate the active index first
+      const height = scrollContentNode.offsetHeight;
       const scrollOffset = window.innerHeight * 0.5;
       const scrollPosition = window.scrollY + scrollOffset;
-      const componentTop = node.offsetTop;
+      const componentTop = scrollContentNode.offsetTop;
       const progress = scrollPosition - componentTop;
       const sectionHeight = height / usps.length;
-      const idx = Math.min(usps.length - 1, Math.max(0, Math.floor(progress / sectionHeight)));
-      setActiveIndex(idx);
+      const newIdx = Math.min(usps.length - 1, Math.max(0, Math.floor(progress / sectionHeight)));
+      setActiveIndex(newIdx);
+
+      // 2. Decide if the header should be sticky based on the new index
+      const rect = sectionNode.getBoundingClientRect();
+      const isLastItem = newIdx === usps.length - 1;
+
+      // The header should be fixed IF:
+      // - The section is in the main view AND
+      // - It is NOT the last item.
+      const shouldFix = rect.top <= NAV_OFFSET && rect.bottom - headH > NAV_OFFSET && !isLastItem;
+      setFixed(shouldFix);
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+    handleScroll(); // Initial check on page load
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [usps.length]);
+  }, [usps.length, headH]); // Dependencies for the combined effect
+
 
   const imageStyleFor = (index) => {
     const total = usps.length;
@@ -115,28 +112,31 @@ export default function UspShowcase() {
 
   return (
     <section ref={sectionRef} className="bg-white font-[var(--font-primary)]">
-      {/* 1) Flow header (keeps layout). Hidden when fixed overlay is shown. */}
+      {/* 1) This is the original header that holds space in the layout.
+           It becomes invisible when the fixed version is active. */}
       <header
         ref={headRef}
         className="px-4 md:px-[5%] pt-4 pb-3 text-center"
         aria-label="USP Section Heading"
-        style={{ visibility: fixed ? "hidden" : "visible" }}
+        style={{ visibility: fixed ? 'hidden' : 'visible' }}
       >
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           Crafted with Purpose
         </h2>
       </header>
 
-      {/* 2) Fixed overlay header (never moves while inside the section) */}
-{fixed && (
-  <div className="fixed left-0 w-full pointer-events-none" style={{ top: NAV_OFFSET }} aria-hidden="true">
-    <div className="px-4 md:px-[5%] pt-4 pb-3 text-center">
-      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
-        Crafted with Purpose
-      </h2>
-    </div>
-  </div>
-)}
+      {/* 2) This is the STICKY header. It only appears when 'fixed' is true,
+           giving the sticky-then-scroll-away effect. */}
+      {fixed && (
+        <header
+          className="fixed w-full bg-white z-20 px-4 md:px-[5%] pt-4 pb-3 text-center"
+          style={{ top: NAV_OFFSET }}
+        >
+          <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
+            Crafted with Purpose
+          </h2>
+        </header>
+      )}
 
       {/* Scrolly content */}
       <div ref={scrollRef} className="flex flex-col md:flex-row min-h-[100vh] md:min-h-[350vh]">

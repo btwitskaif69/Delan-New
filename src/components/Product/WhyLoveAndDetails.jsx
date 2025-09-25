@@ -3,6 +3,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { shopify } from "@/lib/shopify";
 import { GET_PRODUCT_BY_HANDLE } from "@/lib/queries";
+import logo from "@/assets/logos/whatsapp.svg";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -172,7 +173,7 @@ export default function WhyLoveAndDetails({
         </div>
 
         {enableReview && (
-          <div className="mt-6 rounded-lg border border-border/70 p-4">
+          <div className="mt-6 rounded-lg border border-border/70 p-4 mb-4">
             <h3 className="mb-2 text-lg font-semibold" style={{ color: BRAND }}>
               Write a Review
             </h3>
@@ -224,6 +225,15 @@ export default function WhyLoveAndDetails({
             </form>
           </div>
         )}
+<Button
+  variant="outline"
+  className="flex items-center justify-center rounded-full bg-primary! px-6 pr-4! text-white! font-semibold py-8 shadow-lg"
+  onClick={() => window.location.href = "https://wa.me/919266246661?text=Hi,%20I%20need%20help!"}>
+  <img src={logo} alt="WhatsApp Icon" className="w-10 h-10" />
+  <span className="mr-2">Need Help? Chat with us</span>
+</Button>
+
+
       </div>
     </section>
   );

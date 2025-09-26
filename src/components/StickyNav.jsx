@@ -53,9 +53,9 @@ export default function StickyNav({
               size="sm"
               variant={isActive ? "default" : "outline"}
               aria-current={isActive ? "true" : "false"}
-              className={`rounded-md whitespace-nowrap ${
+              className={`rounded-md whitespace-nowrap montserrat-500 uppercase ${
                 !isActive
-                  ? "text-primary border-primary hover:text-primary bg-white!"
+                  ? "text-primary border-primary hover:text-primary bg-white!  montserrat-500 uppercase"
                   : ""
               }`}
             >

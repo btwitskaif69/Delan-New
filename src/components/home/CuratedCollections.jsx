@@ -96,7 +96,7 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           DESIGNED FOR YOUR TRUE STYLE
         </h2>
-        <p className="font-secondary mt-1 text-xl text-primary text-center">
+        <p className="montserrat-500 mt-1 text-lg text-primary text-center">
           To make things easier, we’ve gathered your favorites here.
         </p>
       </header>
@@ -142,7 +142,7 @@ export default function CuratedCollections({ items = DEFAULT_ITEMS }) {
                     className="basis-full sm:basis-1/2 lg:basis-1/3"
                   >
                     <article className="flex flex-col gap-2">
-                      <div className="font-secondary text-[0.8rem] uppercase tracking-[0.12em] text-primary">
+                      <div className="montserrat-500 text-[0.8rem] uppercase tracking-[0.12em] text-primary text-center">
                         {cfg.label}
                       </div>
 

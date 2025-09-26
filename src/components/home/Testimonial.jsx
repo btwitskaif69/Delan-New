@@ -177,7 +177,7 @@ export default function Testimonial() {
   if (loading) {
     return (
       <section id="reviews-section" className="bg-accent px-[5%] py-12">
-        <h2 className="text-center cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
+        <h2 className="text-center cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase lg:text-5xl mb-8 uppercase">
           What Our Customers Say
         </h2>
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -205,7 +205,7 @@ export default function Testimonial() {
   if (error) {
     return (
       <section id="reviews-section" className="bg-accent px-[5%] py-12 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase">
           What Our Customers Say
         </h2>
         <p className="font-secondary text-[#642c44]/80">Couldn’t load reviews: {error}</p>
@@ -216,7 +216,7 @@ export default function Testimonial() {
   if (!items.length) {
     return (
       <section id="reviews-section" className="bg-accent px-[5%] py-12 text-center">
-        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase">
           What Our Customers Say
         </h2>
         <p className="font-secondary text-[#642c44]/80">No approved reviews found yet.</p>

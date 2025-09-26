@@ -57,16 +57,16 @@ export default function StatsCounter() {
   const StatItem = ({ label, target, suffix }) => {
     const count = useCountUp(target, visible);
     return (
-      <Card className="w-full bg-card-none shadow-none">
+      <Card className="w-full bg-card-none shadow-none border-none">
         <CardContent className="px-6 py-6 text-center">
           <h3
-            className="font-secondary text-5xl md:text-5xl font-medium text-primary leading-none"
+            className="montserrat-600 text-5xl md:text-5xl font-medium text-primary leading-none"
             aria-live="polite"
           >
             {count.toLocaleString()}
             {suffix}
           </h3>
-          <p className="font-secondary mt-3 text-sm tracking-widest uppercase text-neutral-600">
+          <p className="montserrat-500 mt-3 text-xs tracking-widest uppercase text-neutral-600">
             {label}
           </p>
         </CardContent>
@@ -75,7 +75,7 @@ export default function StatsCounter() {
   };
 
   return (
-    <section className="bg-accent">
+    <section>
       {/* Intro */}
       <div className="mx-auto max-w-[960px] px-4 pt-12 text-center text-primary">
         <h1 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
@@ -93,7 +93,7 @@ export default function StatsCounter() {
         <div
           ref={ref}
           className="
-            mx-auto max-w-[1280px]
+            mx-auto max-w-[900px]
             flex flex-col md:flex-row items-stretch justify-center
             gap-6 md:gap-0
             divide-y md:divide-y-0 md:divide-x divide-[rgba(100,44,68,0.2)]

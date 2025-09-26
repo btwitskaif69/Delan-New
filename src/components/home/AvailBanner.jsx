@@ -44,7 +44,7 @@ const AvailBanner = () => {
         <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl">
           AVAILABLE ON
         </h2>
-        <p className="text-primary montserrat-60">Shop from your favorite marketplaces</p>
+        <p className="text-primary montserrat-500">Shop from your favorite marketplaces</p>
       </div>
 
       {/* Marquee */}

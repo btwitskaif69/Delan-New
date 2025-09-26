@@ -228,11 +228,11 @@ export default function CoOrdsSection() {
 
       {/* Description / CTA synced to slide */}
       <div className="mx-auto mt-6 flex max-w-[900px] flex-col items-center px-5 text-center">
-        <p className="font-secondary text-md tracking-wide text-primary">{activeMeta.title}</p>
-        <h3 className="cormorant-garamond-700 mt-1 text-[clamp(1.25rem,2.2vw,2.5rem)] font-bold leading-snug text-primary">
+        <p className="montserrat-500 text-md tracking-wide text-primary">{activeMeta.title}</p>
+        <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase">
           {activeMeta.subtitle}
         </h3>
-        <p className="font-secondary mt-1 max-w-[640px] text-[clamp(0.95rem,1.6vw,1.1rem)] leading-relaxed text-primary">
+        <p className="montserrat-500 mt-1 max-w-[640px] text-[clamp(0.95rem,1.6vw,1.1rem)] leading-relaxed text-primary">
           {activeMeta.tagline}
         </p>
 

@@ -92,7 +92,7 @@ export default function InteractiveModelSection({ nextSectionRef }) {
           <h2 className="font-primary cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl font-bold">
             Why Delan Feels Like You
           </h2>
-          <p className="montserrat-500 text-md md:text-lg">
+          <p className="montserrat-500 text-sm md:text-lg">
             Because fashion should vibe with your story.
           </p>
         </motion.div>

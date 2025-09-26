@@ -21,21 +21,36 @@ export default function UspShowcase() {
   const NAV_OFFSET = 0; // set to your fixed navbar height if you have one (e.g., 64)
 
   const usps = [
-    { title: "Crafted from 100% natural fabrics",
-      description: "Experience the pure comfort and breathability of materials sourced directly from nature, ensuring a soft touch on your skin and a clear conscience.",
-      image: Crafted },
-    { title: "Uncompromised quality at fair prices",
-      description: "We believe luxury should be accessible. Our direct-to-consumer model eliminates middlemen, allowing us to offer premium garments without the premium price tag.",
-      image: Uncompromised },
-    { title: "Sustainable fashion for conscious living",
-      description: "From ethical sourcing to eco-friendly packaging, every step of our process is designed to minimize our environmental footprint and promote a healthier planet.",
-      image: Sustainable },
-    { title: "Elegant designs, timeless everyday wear",
-      description: "Our collections are thoughtfully designed to be both beautiful and versatile, creating staple pieces that you will cherish and wear for years to come.",
-      image: Elegant },
-    { title: "Comfort, style, and responsibility combined",
-      description: "You no longer have to choose. Our brand is a promise of clothing that looks good, feels good, and does good for the world.",
-      image: Comfort },
+    {
+      title: "Crafted from 100% natural fabrics",
+      description:
+        "Experience the pure comfort and breathability of materials sourced directly from nature, ensuring a soft touch on your skin and a clear conscience.",
+      image: Crafted,
+    },
+    {
+      title: "Uncompromised quality at fair prices",
+      description:
+        "We believe luxury should be accessible. Our direct-to-consumer model eliminates middlemen, allowing us to offer premium garments without the premium price tag.",
+      image: Uncompromised,
+    },
+    {
+      title: "Sustainable fashion for conscious living",
+      description:
+        "From ethical sourcing to eco-friendly packaging, every step of our process is designed to minimize our environmental footprint and promote a healthier planet.",
+      image: Sustainable,
+    },
+    {
+      title: "Elegant designs, timeless everyday wear",
+      description:
+        "Our collections are thoughtfully designed to be both beautiful and versatile, creating staple pieces that you will cherish and wear for years to come.",
+      image: Elegant,
+    },
+    {
+      title: "Comfort, style, and responsibility combined",
+      description:
+        "You no longer have to choose. Our brand is a promise of clothing that looks good, feels good, and does good for the world.",
+      image: Comfort,
+    },
   ];
 
   // Mobile breakpoint watcher
@@ -177,14 +192,14 @@ export default function UspShowcase() {
               <div
                 key={i}
                 className={[
-                  "absolute w-[420px] transition-all duration-500",
+                  "absolute w-[500px] transition-all duration-500",
                   i === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
                 ].join(" ")}
               >
                 <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4 whitespace-normal">
                   {usp.title}
                 </h3>
-                <p className="text-base lg:text-xl text-primary mb-5 leading-7 lg:leading-8">
+                <p className="montserrat-500 text-base lg:text-lg text-primary mb-5 leading-7 lg:leading-8">
                   {usp.description}
                 </p>
                 <Link

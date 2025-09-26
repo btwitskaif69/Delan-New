@@ -28,7 +28,7 @@ function Stars({ value = 0 }) {
 function Price({ amount, code }) {
   const num = Number.parseFloat(amount ?? 0);
   return (
-    <p className="font-secondary text-[0.95rem] text-primary">
+    <p className="montserrat-500 text-[0.95rem] text-primary">
       ₹{Number.isFinite(num) ? num.toFixed(0) : "0"} {code}
     </p>
   );
@@ -118,7 +118,7 @@ export default function TopProducts({
           <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
-          <p className="font-secondary text-primary/80">Error: {error}</p>
+          <p className="montserrat-500 text-primary/80">Error: {error}</p>
         </section>
       );
     }
@@ -129,7 +129,7 @@ export default function TopProducts({
           <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
-          <p className="font-secondary text-primary/80">No collections found.</p>
+          <p className="montserrat-500 text-primary/80">No collections found.</p>
         </section>
       );
     }
@@ -167,7 +167,7 @@ export default function TopProducts({
                   </AspectRatio>
                   <div className="px-1 pt-3">
                     <h3
-                      className="font-secondary text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
+                      className="montserrat-500 text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
                       title={c.title}
                       style={{ height: "calc(1em * 1.35)" }}
                     >
@@ -289,7 +289,7 @@ export default function TopProducts({
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
-        <p className="font-secondary text-primary/80">Error loading products: {error}</p>
+        <p className="montserrat-500 text-primary/80">Error loading products: {error}</p>
       </section>
     );
   }
@@ -300,7 +300,7 @@ export default function TopProducts({
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
-        <p className="font-secondary text-primary/80">
+        <p className="montserrat-500 text-primary/80">
           The “{handle}” collection could not be found or is empty.
         </p>
       </section>
@@ -320,7 +320,7 @@ export default function TopProducts({
           const justAdded = busyState === "added";
 
           return (
-            <Card key={product.id} className="border-0 shadow-none text-left group">
+            <Card key={product.id} className="border-0 shadow-none text-center group">
               <Link
                 to={`/products/${product.handle}`}
                 aria-label={product.title}
@@ -339,7 +339,7 @@ export default function TopProducts({
                         decoding="async"
                       />
                       <div className="absolute inset-x-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="bg-black/50 text-white text-center py-2 font-secondary font-semibold">
+                        <div className="bg-black/50 text-white text-center py-2 montserrat-500 font-semibold">
                           QUICK VIEW
                         </div>
                       </div>
@@ -348,7 +348,7 @@ export default function TopProducts({
 
                   <div className="px-1 pt-3 flex flex-col justify-center items-center gap-1.5">
                     <h3
-                      className="font-secondary text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
+                      className="montserrat-500 text-[1.1rem] font-semibold text-primary leading-[1.35] truncate"
                       style={{ height: "calc(1em * 1.35)" }}
                       title={product.title}
                     >
@@ -365,7 +365,7 @@ export default function TopProducts({
 
                     <div className="w-full mt-1.5 flex justify-center items-center">
                       <Button
-                        className="font-secondary font-semibold border-2"
+                        className="montserrat-500 font-semibold border-2"
                         style={{ backgroundColor: BRAND, borderColor: BRAND }}
                         onClick={(e) => {
                           e.preventDefault();
@@ -398,7 +398,7 @@ export default function TopProducts({
       <Button
         asChild
         variant="outline"
-        className="uppercase font-secondary font-semibold px-6 py-5 border-2"
+        className="uppercase montserrat-500 font-semibold px-6 py-5 border-2"
         style={{ borderColor: BRAND, color: BRAND }}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = BRAND;

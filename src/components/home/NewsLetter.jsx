@@ -85,8 +85,8 @@ export default function NewsLetter({ className = "" }) {
         <div className="grid gap-6 sm:gap-8 md:grid-cols-3 items-start">
           {/* Copy */}
           <div className="md:col-span-1 flex flex-col justify-start">
-            <h3 className="text-2xl sm:text-3xl font-semibold">Join Our Newsletter</h3>
-            <p className="mt-2 text-sm sm:text-base text-primary/80">
+            <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase">Join Our Newsletter</h3>
+            <p className="montserrat-500 mt-2 text-sm sm:text-base text-primary">
               Style tips, early access to drops, and members-only offers. No spam—unsubscribe anytime.
             </p>
           </div>
@@ -155,7 +155,7 @@ export default function NewsLetter({ className = "" }) {
                   onChange={(e) => setConsent(e.target.checked)}
                   className="mt-0.5 h-4 w-4"
                 />
-                <label htmlFor="consent" className="text-xs sm:text-sm text-primary/80">
+                <label htmlFor="consent" className="text-xs sm:text-sm text-primary montserrat-500">
                   I agree to receive marketing emails from Delan. Read our{" "}
                   <a href="/privacy-policy" className="underline underline-offset-2">Privacy Policy</a>.
                 </label>
@@ -169,7 +169,7 @@ export default function NewsLetter({ className = "" }) {
                   onChange={(e) => setWaOptIn(e.target.checked)}
                   className="mt-0.5 h-4 w-4"
                 />
-                <label htmlFor="waOptIn" className="text-xs sm:text-sm text-primary/80">
+                <label htmlFor="waOptIn" className="text-xs sm:text-sm text-primary montserrat-500">
                   Send me updates on <span className="font-semibold">WhatsApp</span>.
                 </label>
               </div>

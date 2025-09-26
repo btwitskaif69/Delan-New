@@ -73,11 +73,11 @@ export default function Categories() {
                 >
                   <span
                     className={[
-                      "font-primary uppercase",
-                      "text-[clamp(1.6rem,2.4vw,1rem)] leading-tight",
-                      "tracking-[0.06em]",
+                      "uppercase",
+                      "text-lg md:text-2xl leading-tight",
+                      "tracking-[0.06em] montserrat-500 uppercase",
                       isActive
-                        ? "text-[color:var(--brand-642,#642c44)]"
+                        ? "text-primary"
                         : "text-neutral-300 hover:text-neutral-400 transition-colors",
                     ].join(" ")}
                   >

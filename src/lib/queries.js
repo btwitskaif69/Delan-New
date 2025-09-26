@@ -53,7 +53,13 @@ export const GET_PRODUCT_BY_HANDLE = `
         { namespace: "promo", key: "banner_fg" },
         { namespace: "promo", key: "banner_code" },
         { namespace: "promo", key: "banner_valid_till" },
-        { namespace: "promo", key: "banner_min_amount" }
+        { namespace: "promo", key: "banner_min_amount" },
+        { namespace: "category", key: "Color" },
+        { namespace: "category", key: "Size" },
+        { namespace: "category", key: "Fabric" },
+        { namespace: "category", key: "Age group" },
+        { namespace: "category", key: "Clothing features" },
+        { namespace: "category", key: "Target gender" }
       ]) {
         key
         namespace
@@ -69,6 +75,7 @@ export const GET_PRODUCT_BY_HANDLE = `
     }
   }
 `;
+
 
 export const GET_COLLECTIONS = /* GraphQL */ `
   query getCollections($first: Int!) {

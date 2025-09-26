@@ -6,7 +6,6 @@ import flipkart from "@/assets/logos/flipkart.svg";
 import meesho from "@/assets/logos/meesho.svg";
 import myntra from "@/assets/logos/myntra.svg";
 
-// Map each marketplace to its imported logo
 const MARKETPLACES = [
   { name: "Myntra", alt: "Myntra", logo: myntra },
   { name: "Amazon", alt: "Amazon", logo: amazon },
@@ -15,58 +14,52 @@ const MARKETPLACES = [
   { name: "Meesho", alt: "Meesho", logo: meesho },
 ];
 
+const LogoSet = ({ ariaHidden = false }) => (
+  <ul
+    className="flex w-1/2 items-center justify-around"
+    aria-hidden={ariaHidden || undefined}
+  >
+    {MARKETPLACES.map((mp, i) => (
+      <li
+        key={`${mp.name}-${i}-${ariaHidden ? "b" : "a"}`}
+        className="flex-none h-20 w-36 flex items-center justify-center"
+        title={mp.name}
+      >
+        <img
+          src={mp.logo}
+          alt={mp.alt}
+          className="max-h-10 w-auto object-contain"
+          loading="lazy"
+        />
+      </li>
+    ))}
+  </ul>
+);
+
 const AvailBanner = () => {
   return (
     <div className="w-full bg-muted/30 py-8 overflow-hidden">
       {/* Heading */}
       <div className="mb-6 text-center">
-        <h2 className="cormorant-garamond-700 text-primary  text-3xl md:text-4xl lg:text-4xl">
+        <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl">
           AVAILABLE ON
         </h2>
-        <p className="text-primary montserrat-60">
-          Shop from your favorite marketplaces
-        </p>
+        <p className="text-primary montserrat-60">Shop from your favorite marketplaces</p>
       </div>
 
-      {/* Marquee Container */}
-      <div className="relative">
-        {/* Fade edges for a smooth scroll effect */}
-        <div className="absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
-        <div className="absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
+      {/* Marquee */}
+      <div className="relative group overflow-hidden">
+        {/* Edge fades */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
 
-        {/* Continuous scroll */}
-        <div className="flex animate-marquee">
-          {/* First set of logos */}
-          <div className="flex shrink-0 items-center justify-around gap-16 px-8">
-            {MARKETPLACES.map((marketplace, index) => (
-              <div
-                key={`first-${index}`}
-                className="flex h-20 w-36 items-center justify-center"
-              >
-                <img
-                  src={marketplace.logo}
-                  alt={marketplace.alt}
-                  className="max-h-10 w-auto object-contain"
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Duplicate set for seamless looping */}
-          <div className="flex shrink-0 items-center justify-around gap-16 px-8">
-            {MARKETPLACES.map((marketplace, index) => (
-              <div
-                key={`second-${index}`}
-                className="flex h-20 w-36 items-center justify-center"
-              >
-                <img
-                  src={marketplace.logo}
-                  alt={marketplace.alt}
-                  className="max-h-10 w-auto object-contain"
-                />
-              </div>
-            ))}
-          </div>
+        {/* Track: 200% width, two identical 50% halves */}
+        <div
+          className="flex w-[200%] animate-marquee pause-on-hover"
+          style={{ ["--marquee-duration"]: "22s" }}
+        >
+          <LogoSet />
+          <LogoSet ariaHidden />
         </div>
       </div>
     </div>

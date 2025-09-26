@@ -10,6 +10,7 @@ import DelanShiny from '../home/DelanShiny'
 import TrustBanner from '../TrustBanner'
 import Testimonial from '../home/Testimonial'
 import WatchAndBuy from '../home/WatchAndBuy'
+import PrBanner from '../home/PrBanner'
 
 const Product = () => {
   return (
@@ -23,7 +24,7 @@ const Product = () => {
         <ProductUSP/>
         <Testimonial/>
         <ProducrReview/>
-        <TrustBanner/>
+        <PrBanner/>
         <DelanShiny/>
     </main>
   )

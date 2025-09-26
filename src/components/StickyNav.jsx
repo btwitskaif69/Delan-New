@@ -1,21 +1,11 @@
-// src/components/StickyNav.jsx
 import React, { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const BRAND = "#642c44";
-
-// src/components/StickyNav.jsx
 export const DEFAULT_NAV_ITEMS = [
   { key: "categories", label: "Categories", mode: "collections" },
-
-  // ✅ use the actual Shopify handle from the collection URL
   { key: "back-in-stock-bestsellers", label: "Bestsellers", handle: "back-in-stock-bestsellers" },
-
   { key: "trousers", label: "Trousers", handle: "trousers" },
-
-  // Keep label, handle can be short-dress or short-dresses; we'll handle both
   { key: "short-dress", label: "Short Dress", handle: "short-dress" },
-
   { key: "maxi-midi", label: "Maxi & Midi", handle: "maxi-midi-dress" },
   { key: "co-ords", label: "Co-ords", handle: "co-ords" },
 ];
@@ -29,8 +19,11 @@ export default function StickyNav({
   headerHeight = 64,
   sticky = true,
 }) {
-  const [internal, setInternal] = useState(value ?? defaultValue ?? (items[0]?.key ?? ""));
-  const activeKey = value ?? internal;
+  // Handles internal state for uncontrolled component usage
+  const [internalValue, setInternalValue] = useState(value ?? defaultValue ?? items[0]?.key ?? "");
+
+  // Use the controlled `value` prop if provided, otherwise fall back to internal state
+  const activeKey = value ?? internalValue;
 
   const rootStyle = useMemo(
     () => (sticky ? { top: `${headerHeight}px`, zIndex: 30 } : undefined),
@@ -38,7 +31,11 @@ export default function StickyNav({
   );
 
   return (
-    <nav className={`w-full border-b bg-white ${className}`} aria-label="Section navigation" style={rootStyle}>
+    <nav
+      className={`w-full border-b bg-white ${className}`}
+      aria-label="Section navigation"
+      style={rootStyle}
+    >
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-2 px-3 py-4">
         {items.map((item) => {
           const isActive = activeKey === item.key;
@@ -47,16 +44,20 @@ export default function StickyNav({
               key={item.key}
               type="button"
               onClick={() => {
-                if (!value) setInternal(item.key);
-                onChange?.(item); // <-- bubble up selection
+                // Only set internal state if the component is not controlled
+                if (value === undefined) {
+                  setInternalValue(item.key);
+                }
+                onChange?.(item); // Notify parent of the change
               }}
               size="sm"
               variant={isActive ? "default" : "outline"}
               aria-current={isActive ? "true" : "false"}
-              className="rounded-md whitespace-nowrap transition-colors"
-              style={isActive
-                ? { backgroundColor: BRAND, borderColor: BRAND, color: "#fff" }
-                : { borderColor: BRAND, color: BRAND }}
+              className={`rounded-md whitespace-nowrap ${
+                !isActive
+                  ? "text-primary border-primary hover:text-primary bg-white!"
+                  : ""
+              }`}
             >
               {item.label}
             </Button>
@@ -66,3 +67,4 @@ export default function StickyNav({
     </nav>
   );
 }
+

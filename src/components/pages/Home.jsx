@@ -22,6 +22,7 @@ import DelanShiny from "../home/DelanShiny";
 import TrustBanner from "../TrustBanner";
 import AvailBanner from "../home/AvailBanner";
 import NewsLetter from "../home/NewsLetter";
+import PrBanner from "../home/PrBanner";
 
 // 🔹 Lazy-load preloader chunk only if needed (keeps initial JS small)
 const Preloader = React.lazy(() => import("@/components/Preloader"));
@@ -84,6 +85,8 @@ export default function Home() {
       <AvailBanner speed={20000} direction="right" gapClass="gap-16" />
       <CategoriesSection />
       <WatchAndBuy />
+      <FlippingCard />
+      <PrBanner/>
       <OfferSection />
       <InteractiveModelSection />
       <StatsCounter />
@@ -106,9 +109,9 @@ export default function Home() {
       <Categories />
       <UspShowcase />
       <Testimonial />
-      <FlippingCard />
+      
       <NewsLetter />
-      <TrustBanner />
+      <PrBanner/>
       <DelanShiny />
     </main>
   );

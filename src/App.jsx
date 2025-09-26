@@ -1,6 +1,7 @@
 // App.jsx
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+// 1. Import useLocation from react-router-dom
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from '@/components/pages/Home'
 import Footer from "./components/Footer";
@@ -15,9 +16,18 @@ const TrackOrder = () => <div className="p-6">Track Order</div>;
 const NotFound = () => <div className="p-6">404 – Not found</div>;
 
 export default function App() {
+  // 2. Get the current location object
+  const location = useLocation();
+
+  // 3. Determine if the current path is a product page
+  // The path for a product is /products/:handle, so we check if it starts with '/products/'
+  const isProductPage = location.pathname.startsWith('/products/');
+
   return (
     <main className="min-h-screen">
-      <Marquee/>
+      {/* 4. Conditionally render the Marquee. It will only show if it's NOT a product page. */}
+      {!isProductPage && <Marquee />}
+
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -29,11 +39,10 @@ export default function App() {
         <Route path="/collections/:handle" element={<Collection />} />
         <Route path="/products/:handle" element={<Product />} />
 
-
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </main>
   );
 }

@@ -6,14 +6,6 @@ import { shopify } from "@/lib/shopify";
 import { GET_TOP_PRODUCTS } from "@/lib/queries";
 import { Badge } from "@/components/ui/badge";
 
-/**
- * Props:
- * - handle: Shopify collection handle (default "top-products")
- * - speed: seconds for one full loop (default 35, same as Marquee.jsx)
- * - gap: CSS length for gap between badges (default "1.25rem", same as Marquee.jsx)
- * - pauseOnHover: boolean (default true)
- * - bgClass: tailwind classes for the ribbon background (default "bg-secondary")
- */
 export default function TopProductsMarquee({
   handle = "top-products",
   speed = 35,

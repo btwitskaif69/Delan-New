@@ -205,28 +205,17 @@ html {
 }
 
 @layer utilities {
-  @keyframes marquee {
-    0% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
   .animate-marquee {
-    animation: marquee 20s linear infinite;
+    animation: marquee var(--marquee-duration, 22s) linear infinite;
   }
-
-  .animate-marquee:hover {
+  .pause-on-hover {
+    animation-play-state: running;
+  }
+  .pause-on-hover:hover {
     animation-play-state: paused;
   }
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
 }

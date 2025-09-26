@@ -1,113 +1,185 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Star } from "lucide-react";
 
-// Logo assets
-import forbes from "@/assets/logos/forbes.svg";
-import vogue from "@/assets/logos/vogue.svg";
-import cosmopolitan from "@/assets/logos/cosmopolitan.svg";
-import cnbc from "@/assets/logos/cnbc.svg";
+// Replace these with your actual SVG logo imports
+import Forbes from "@/assets/logos/forbes.svg";
+import Vogue from "@/assets/logos/vogue.svg";
+import Cosmopolitan from "@/assets/logos/cosmopolitan.svg";
+import Cnbc from "@/assets/logos/cnbc.svg";
 
-// Outlined star (gold stroke, no fill)
-const OutlineStar = ({ size = 20 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill='none' aria-hidden="true">
-    <path
-      d="M12 3.5l2.92 5.92 6.53.95-4.72 4.6 1.11 6.47L12 18.9 6.16 21.44l1.11-6.47-4.72-4.6 6.53-.95L12 3.5z"
-      stroke="#F5C543"
-      strokeWidth="1.6"
-      strokeLinejoin="round"
-    />
-  </svg>
+/* -------- Solid star overlay for visible fill -------- */
+function SolidStar({ className = "", style }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} style={style}>
+      <polygon
+        points="12 17.27 18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/* ---------------- Logos ---------------- */
+const LOGOS = [
+  { name: "Forbes India", alt: "Forbes India", logo: Forbes },
+  { name: "Vogue", alt: "Vogue", logo: Vogue },
+  { name: "Cosmopolitan", alt: "Cosmopolitan", logo: Cosmopolitan },
+  { name: "CNBC TV18", alt: "CNBC TV18", logo: Cnbc },
+];
+
+const LogoSet = ({ ariaHidden = false }) => (
+  <ul className="flex w-1/2 items-center justify-around" aria-hidden={ariaHidden || undefined}>
+    {LOGOS.map((mp, i) => (
+      <li
+        key={`${mp.name}-${i}-${ariaHidden ? "b" : "a"}`}
+        className="flex-none h-20 w-36 flex items-center justify-center"
+        title={mp.name}
+      >
+        <img src={mp.logo} alt={mp.alt} className="max-h-10 w-auto object-contain" loading="lazy" />
+      </li>
+    ))}
+  </ul>
 );
 
-export default function PrBanner({ className = "" }) {
+export default function PrBanner() {
+  const [isVisible, setIsVisible] = useState(false);
+  const [customerCount, setCustomerCount] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+
+  useEffect(() => {
+    setIsVisible(true);
+
+    // Customers counter
+    const customerTarget = 100000;
+    const customerIncrement = customerTarget / 100;
+    let customerCurrent = 0;
+    const customerTimer = setInterval(() => {
+      customerCurrent += customerIncrement;
+      if (customerCurrent >= customerTarget) {
+        customerCurrent = customerTarget;
+        clearInterval(customerTimer);
+      }
+      setCustomerCount(Math.floor(customerCurrent));
+    }, 20);
+
+    // Reviews counter
+    const reviewTarget = 5000;
+    const reviewIncrement = reviewTarget / 80;
+    let reviewCurrent = 0;
+    const reviewTimer = setInterval(() => {
+      reviewCurrent += reviewIncrement;
+      if (reviewCurrent >= reviewTarget) {
+        reviewCurrent = reviewTarget;
+        clearInterval(reviewTimer);
+      }
+      setReviewCount(Math.floor(reviewCurrent));
+    }, 25);
+
+    return () => {
+      clearInterval(customerTimer);
+      clearInterval(reviewTimer);
+    };
+  }, []);
+
+  const formatNumber = (num) => {
+    if (num >= 100000) return `${(num / 100000).toFixed(0)},00,000+`;
+    return num.toLocaleString();
+  };
+
   return (
-    <section className={["w-full", className].join(" ")} aria-label="Press & awards banner">
-      <div className="mx-auto max-w-7xl px-3 sm:px-5 lg:px-8 py-4 sm:py-6">
-        <div className="overflow-hidden rounded-2xl">
-          {/* Headline + stars */}
-          <div className="px-3 sm:px-6 pt-5">
-            <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 text-center">
-              <h3 className="font-serif font-semibold text-neutral-900 leading-tight text-[clamp(1rem,3.4vw,1.75rem)]">
-                1,00,000+ <span className="whitespace-nowrap">Satisfied Customers</span>
-              </h3>
+    <div className="w-full bg-muted/30 py-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
 
-              <div className="flex items-center justify-center gap-2 sm:gap-3">
-                <div className="flex items-center gap-[2px]" aria-hidden="true">
-                  <OutlineStar />
-                  <OutlineStar />
-                  <OutlineStar />
-                  <OutlineStar />
-                  <OutlineStar />
-                </div>
-                <span className="text-[clamp(0.85rem,2.2vw,1rem)] text-neutral-600">(5000+)</span>
-                <span className="sr-only">Five star rating from over five thousand reviews</span>
-              </div>
-            </div>
-          </div>
+        {/* Customer Stats + Stars */}
+        <div
+          className={`text-center mb-12 transition-all duration-1000 transform ${
+            isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          }`}
+          style={{ transitionDelay: "250ms" }}
+        >
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <h3 className="text-3xl md:text-4xl font-bold text-primary montserrat-700 uppercase">
+              {formatNumber(customerCount)} Satisfied Customers
+            </h3>
 
-          {/* Logos & award — perfectly centered, consistent heights */}
-          <div className="px-3 sm:px-6 pb-5 sm:pb-6 pt-4">
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-10">
-              {/* Each logo sits in a fixed-height box to align baselines */}
-              <div className="h-5 sm:h-10 md:h-8 flex items-center">
-                <img
-                  src={forbes}
-                  alt="Forbes India"
-                  className="block h-full w-auto object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
+            {/* Stars: stroke base + solid overlay with looping left→right wipe */}
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="relative inline-block w-6 h-6">
+                  {/* Base outline */}
+                  <Star className="w-6 h-6 text-gray-300" />
 
-              <div className="h-5 sm:h-10 md:h-8 flex items-center">
-                <img
-                  src={vogue}
-                  alt="Vogue India"
-                  className="block h-full w-auto object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-
-              <div className="h-5 sm:h-10 md:h-8 flex items-center">
-                <img
-                  src={cosmopolitan}
-                  alt="Cosmopolitan India"
-                  className="block h-full w-auto object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-
-              {/* CNBC + award block */}
-              <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5">
-                <div className="h-5 sm:h-10 md:h-8 flex items-center">
-                  <img
-                    src={cnbc}
-                    alt="CNBC TV18"
-                    className="block h-full w-auto object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-
-                {/* divider only when space allows */}
-                <div className="hidden md:block h-8 w-px bg-neutral-300/80" />
-
-                <div className="text-left leading-tight min-w-0">
-                  <div className="text-[11px] sm:text-[12px] md:text-[13px] text-neutral-600 truncate">
-                    India Business Leader Awards 2024
-                  </div>
-                  <div className="text-[12px] sm:text-[13px] md:text-[15px] font-semibold text-neutral-900">
-                    Breakout Brand Of The Year
-                  </div>
-                </div>
-              </div>
+                  {/* Overlay fill (animated) */}
+                  <span
+                    className="absolute left-0 top-0 h-full overflow-hidden pointer-events-none z-10 star-fill-animation"
+                    style={{
+                      animationDelay: `${i * 200}ms`,
+                      willChange: "width",
+                      transform: "translateZ(0)",
+                    }}
+                    aria-hidden="true"
+                  >
+                    <SolidStar className="w-6 h-6 text-yellow-400" />
+                  </span>
+                </span>
+              ))}
+              <span className="ml-2 text-3xl md:text-4xl font-bold text-primary montserrat-700 uppercase">
+                ({reviewCount.toLocaleString()}+)
+              </span>
             </div>
           </div>
         </div>
+
+        {/* Marquee */}
+        <div className="relative group overflow-hidden">
+          {/* Edge fades */}
+          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
+
+          {/* Track: exactly 200% width, two identical halves */}
+          <div
+            className="flex w-[200%] marquee-track"
+            style={{ ["--marquee-duration"]: "22s" }}
+          >
+            <LogoSet />
+            <LogoSet ariaHidden />
+          </div>
+        </div>
       </div>
-    </section>
+
+      {/* Self-contained CSS: marquee + star animation */}
+      <style jsx>{`
+        .marquee-track {
+          animation-name: marquee;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          animation-duration: var(--marquee-duration, 22s);
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+
+        .star-fill-animation {
+          animation: starFillSequence 3s ease-in-out infinite;
+          width: 0%;
+        }
+        @keyframes starFillSequence {
+          0%   { width: 0%; }
+          25%  { width: 100%; }
+          75%  { width: 100%; }
+          76%  { width: 0%; }
+          100% { width: 0%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .marquee-track, .star-fill-animation { animation: none !important; }
+          .star-fill-animation { width: 100%; }
+        }
+      `}</style>
+    </div>
   );
 }

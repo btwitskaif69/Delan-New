@@ -350,7 +350,7 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
   };
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-6 sm:py-8">
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:py-10">
       <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
         {/* LEFT: Gallery */}
         <div className="md:pl-2">
@@ -439,7 +439,7 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
               >
                 {product.title}
               </h1>
-              <p className="mt-1 text-sm sm:text-base text-muted-foreground">
+              <p className="mt-1 text-sm sm:text-base text-muted-foreground mont">
                 Designed for Timeless Elegance
               </p>
             </div>

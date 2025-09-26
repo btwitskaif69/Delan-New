@@ -62,10 +62,15 @@ export default function WhyLoveAndDetails({
   const [err, setErr] = React.useState("");
   const [loveHtml, setLoveHtml] = React.useState("");
 
+  // ---- NEW: collapse/expand state for description
+  const [expanded, setExpanded] = React.useState(false);
+  const [overflowNeeded, setOverflowNeeded] = React.useState(false);
+  const descRef = React.useRef(null);
+  const COLLAPSED_PX = 240; // ~14–16 lines depending on font-size/line-height
+
   React.useEffect(() => {
     let cancelled = false;
 
-    // ⬇️ ADDED LOGGING
     console.log("Component mounted. URL Params:", params);
     console.log("Resolved product handle for API call:", handle);
 
@@ -81,8 +86,6 @@ export default function WhyLoveAndDetails({
       setErr("");
       try {
         const data = await shopify(GET_PRODUCT_BY_HANDLE, { handle });
-        
-        // ⬇️ UNCOMMENTED AND ENHANCED LOGGING
         console.debug("✅ Shopify API Response:", { handle, data });
 
         const product = data?.product;
@@ -92,7 +95,6 @@ export default function WhyLoveAndDetails({
           if (html) {
             setLoveHtml(html);
           } else {
-            // This error will trigger if product is null or has no description
             console.warn("DEBUG: Product not found in response or has no description.", { product });
             setErr("Product not found or has no description.");
             setLoveHtml("<p>No description available.</p>");
@@ -114,6 +116,33 @@ export default function WhyLoveAndDetails({
     };
   }, [handle]);
 
+  // ---- NEW: detect if the description needs truncation (overflow)
+  React.useEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+
+    const check = () => {
+      // When collapsed, we show the button only if natural content height exceeds the collapsed height
+      const naturalHeight = el.scrollHeight;
+      setOverflowNeeded(naturalHeight > COLLAPSED_PX + 8);
+    };
+
+    // Initial check
+    check();
+
+    // Re-check on resize or when images inside load
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+
+    const imgs = el.querySelectorAll("img");
+    imgs.forEach((img) => img.addEventListener("load", check));
+
+    return () => {
+      ro.disconnect();
+      imgs.forEach((img) => img.removeEventListener("load", check));
+    };
+  }, [loveHtml]);
+
   // simple local review state
   const [rating, setRating] = React.useState(0);
   const [text, setText] = React.useState("");
@@ -127,7 +156,7 @@ export default function WhyLoveAndDetails({
       {/* LEFT: Why you’ll love this (Shopify description) */}
       <Card className="border-border/70">
         <CardHeader>
-          <CardTitle className="text-xl sm:text-2xl">Why You’ll Love This</CardTitle>
+          <CardTitle className="cormorant-garamond-700 uppercase text-primary text-2xl lg:text-3xl">Why You’ll Love This</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -140,12 +169,39 @@ export default function WhyLoveAndDetails({
           ) : err && !loveHtml ? (
             <p className="text-sm text-muted-foreground">{err}</p>
           ) : (
-            <div
-              className="space-y-3 leading-7 text-foreground/90
-                         [&_strong]:font-semibold [&_a]:underline
-                         [&_ul]:list-disc [&_ul]:pl-5"
-              dangerouslySetInnerHTML={{ __html: loveHtml }}
-            />
+            <>
+              {/* Description wrapper with collapse/expand */}
+              <div className="relative">
+                <div
+                  ref={descRef}
+                  className={[
+                    "space-y-3 leading-7 text-foreground transition-[max-height] duration-500 ease-in-out",
+                    "[&_strong]:font-semibold [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5",
+                    expanded ? "max-h-[9999px]" : "max-h-[340px] overflow-hidden",
+                  ].join(" ")}
+                  dangerouslySetInnerHTML={{ __html: loveHtml }}
+                />
+                {!expanded && overflowNeeded && (
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+
+              {overflowNeeded && (
+                <div className="mt-3">
+                  <Button
+                    type="button"
+                    className="bg-primary"
+                    aria-expanded={expanded}
+                    onClick={() => setExpanded((v) => !v)}
+                  >
+                    {expanded ? "Show less" : "Read more"}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </CardContent>
       </Card>
@@ -162,8 +218,7 @@ export default function WhyLoveAndDetails({
                 <AccordionContent>
                   <Separator className="mb-3" />
                   <div
-                    className="px-4 pb-4 leading-7 text-foreground/90
-                               [&_ul]:list-disc [&_ul]:pl-5"
+                    className="px-4 pb-4 leading-7 text-foreground/90 [&_ul]:list-disc [&_ul]:pl-5"
                     dangerouslySetInnerHTML={{ __html: s.html }}
                   />
                 </AccordionContent>
@@ -188,17 +243,11 @@ export default function WhyLoveAndDetails({
                     type="button"
                     onClick={() => setRating(i)}
                     aria-label={`${i} star${i > 1 ? "s" : ""}`}
-                    className="rounded transition hover:scale-[1.05]
-                               focus-visible:outline-none focus-visible:ring-2
-                               focus-visible:ring-primary focus-visible:ring-offset-2"
+                    className="rounded transition hover:scale-[1.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                   >
                     <Star
                       size={22}
-                      className={
-                        active
-                          ? "text-[color:var(--brand-642,#642c44)]"
-                          : "text-muted-foreground/50"
-                      }
+                      className={active ? "text-yellow-500" : "text-muted-foreground/50"}
                       {...(active ? { fill: "currentColor" } : {})}
                     />
                   </button>
@@ -213,27 +262,23 @@ export default function WhyLoveAndDetails({
                 placeholder="Share your thoughts..."
                 className="min-h-[100px]"
               />
-              <div className="flex justify-end">
-                <Button
-                  type="submit"
-                  className="rounded-full px-6"
-                  style={{ backgroundColor: BRAND }}
-                >
+              <div className="flex justify-center">
+                <Button type="submit" className="rounded-full w-full px-6 hover:bg-primary/90!" style={{ backgroundColor: BRAND }}>
                   Submit
                 </Button>
               </div>
             </form>
           </div>
         )}
+
+        {/* WhatsApp CTA */}
 <Button
   variant="outline"
-  className="flex items-center justify-center rounded-full bg-primary! px-6 pr-4! text-white! font-semibold py-8 shadow-lg"
+  className="flex items-center justify-center rounded-full bg-primary! px-6 pr-4! text-white! font-semibold py-5 shadow-lg"
   onClick={() => window.location.href = "https://wa.me/919266246661?text=Hi,%20I%20need%20help!"}>
-  <img src={logo} alt="WhatsApp Icon" className="w-10 h-10" />
+  <img src={logo} alt="WhatsApp Icon" className="w-7 h-7" />
   <span className="mr-2">Need Help? Chat with us</span>
 </Button>
-
-
       </div>
     </section>
   );

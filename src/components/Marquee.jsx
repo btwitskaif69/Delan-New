@@ -26,14 +26,8 @@ export default function Marquee({
 
   return (
     <div
-      className="relative w-full overflow-hidden border-b bg-secondary"
-      style={{
-        // fade edges (mask) for a nice look; browsers that don't support mask will just ignore
-        WebkitMaskImage:
-          "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-        maskImage:
-          "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-      }}
+      className="relative w-full overflow-hidden border-b bg-accent"
+
       role="region"
       aria-label="Store promotions"
     >
@@ -58,8 +52,7 @@ export default function Marquee({
           {lane.map((text, i) => (
             <Badge
               key={`${text}-${i}`}
-              variant="secondary"
-              className="whitespace-nowrap text-[13px] sm:text-sm text-black font-regular  px-3 py-1"
+              className="whitespace-nowrap text-[13px] sm:text-sm text-black font-regular bg-accent px-3 py-1"
             >
               {text}
             </Badge>

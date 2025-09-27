@@ -153,7 +153,7 @@ export default function CoOrdsSection() {
       : CATEGORY_META[0];
 
   return (
-    <section className="relative overflow-hidden bg-accent py-12">
+    <section className="relative overflow-hidden bg-accent py-10">
       {/* Top layout */}
       <div className="mx-auto grid w-[min(90%,1400px)] items-center justify-items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
         {/* Left text (desktop) */}

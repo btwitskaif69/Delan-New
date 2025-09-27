@@ -7,7 +7,7 @@ import logo from "@/assets/images/Delan-logo.svg";
 
 const DelanShiny = () => {
   return (
-    <section className="w-full bg-accent">
+    <section className="w-full bg-accent py-10">
       <div
         className="
           max-w-[1400px] mx-auto
@@ -20,7 +20,7 @@ const DelanShiny = () => {
         <img
           src={logo}
           alt="DELAN brand logo"
-          className="w-105 h-auto mx-auto block"
+          className="w-70 h-auto mx-auto block mb-10"
         />
 
         <ShinyText

@@ -15,7 +15,7 @@ export default function FlippingCard() {
   };
 
   return (
-    <section className="px-[5%] py-12">
+    <section className="px-[5%] py-4">
       <div
         className="mx-auto max-w-8xl"
         role="button"

@@ -38,20 +38,17 @@ const LogoSet = ({ ariaHidden = false }) => (
 
 const AvailBanner = () => {
   return (
-    <div className="w-full bg-muted/30 py-8 overflow-hidden">
+    <div className="w-full bg-white pb-4 pt-8 overflow-hidden">
       {/* Heading */}
       <div className="mb-6 text-center">
         <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl">
           AVAILABLE ON
         </h2>
-        <p className="text-primary montserrat-500">Shop from your favorite marketplaces</p>
+        <p className="text-primary montserrat-500 pb-2">Shop from your favorite marketplaces</p>
       </div>
 
       {/* Marquee */}
-      <div className="relative group overflow-hidden bg-secondary py-5">
-        {/* Edge fades */}
-        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
-        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
+      <div className="relative group overflow-hidden bg-accent py-5">
 
         {/* Track: 200% width, two identical 50% halves */}
         <div

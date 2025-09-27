@@ -32,11 +32,11 @@ export default function StickyNav({
 
   return (
     <nav
-      className={`w-full border-b bg-white ${className}`}
+      className={`w-full py-6 border-b bg-white ${className}`}
       aria-label="Section navigation"
       style={rootStyle}
     >
-      <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-2 px-3 py-4">
+      <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-center gap-2 px-3">
         {items.map((item) => {
           const isActive = activeKey === item.key;
           return (
@@ -50,7 +50,7 @@ export default function StickyNav({
                 }
                 onChange?.(item); // Notify parent of the change
               }}
-              size="sm"
+              size="lg"
               variant={isActive ? "default" : "outline"}
               aria-current={isActive ? "true" : "false"}
               className={`rounded-md whitespace-nowrap montserrat-500 uppercase ${

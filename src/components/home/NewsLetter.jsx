@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { shopify } from "@/lib/shopify";
 import { NEWSLETTER_SIGNUP } from "@/lib/queries";
+import { Label } from "../ui/label";
 
 export default function NewsLetter({ className = "" }) {
   const [email, setEmail] = useState("");
@@ -21,7 +22,6 @@ export default function NewsLetter({ className = "" }) {
     }
   };
 
-  // Simple India/E.164 friendly helpers
   const normalizePhone = (raw) => {
     if (!raw) return "";
     let p = (raw + "").replace(/[()\-\s]/g, "");
@@ -30,14 +30,14 @@ export default function NewsLetter({ className = "" }) {
     return p;
   };
   const validatePhone = (raw) => {
-    if (!raw) return true; // optional unless opted in
+    if (!raw) return true;
     const p = normalizePhone(raw);
     return /^\+\d{7,15}$/.test(p);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (hp) return; // bot trap
+    if (hp) return;
     if (!email) return setStatus({ ok: false, msg: "Please enter your email." });
 
     if (waOptIn && !phone) {
@@ -54,12 +54,11 @@ export default function NewsLetter({ className = "" }) {
       const password = makeRandomPassword();
       const phoneE164 = normalizePhone(phone);
 
-      // Create the customer in Shopify (Storefront API)
       const data = await shopify(NEWSLETTER_SIGNUP, {
         email,
         acceptsMarketing: consent,
         password,
-        phone: phoneE164 || null, // <-- stored on Customer
+        phone: phoneE164 || null,
       });
 
       const errs =
@@ -81,11 +80,13 @@ export default function NewsLetter({ className = "" }) {
 
   return (
     <section className={`w-full bg-white text-primary ${className}`}>
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-10 sm:py-14">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-8">
         <div className="grid gap-6 sm:gap-8 md:grid-cols-3 items-start">
           {/* Copy */}
-          <div className="md:col-span-1 flex flex-col justify-start">
-            <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase">Join Our Newsletter</h3>
+          <div className="md:col-span-1 flex flex-col justify-start text-center md:text-left">
+            <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl uppercase">
+              Join Our Newsletter
+            </h3>
             <p className="montserrat-500 mt-2 text-sm sm:text-base text-primary">
               Style tips, early access to drops, and members-only offers. No spam—unsubscribe anytime.
             </p>
@@ -105,48 +106,60 @@ export default function NewsLetter({ className = "" }) {
               aria-hidden="true"
             />
 
-            {/* Row 1: Email */}
             <div className="flex flex-col gap-3">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <label htmlFor="newsletter-email" className="sr-only">Email</label>
+              {/* Email Field */}
+              <div className="flex flex-col gap-2">
+                <Label
+                  htmlFor="newsletter-email"
+                  className="font-semibold text-primary text-sm sm:text-base tracking-wide"
+                >
+                  Let’s be friends
+                </Label>
                 <input
                   id="newsletter-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="w-full rounded-lg border border-primary/20 bg-white/80 px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-primary/40"
+                  placeholder="e.g. name@example.com"
+                  className="w-full rounded-lg border border-primary/30 bg-white/80 px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-primary/50"
                   autoComplete="email"
                 />
               </div>
 
-              {/* Row 2: WhatsApp (below Email) + Submit */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                <label htmlFor="newsletter-phone" className="sr-only">WhatsApp number</label>
-                <input
-                  id="newsletter-phone"
-                  type="tel"
-                  inputMode="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="WhatsApp number"
-                  className="w-full sm:flex-1 rounded-lg border border-primary/20 bg-white/80 px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-primary/40"
-                  autoComplete="tel"
-                />
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-white text-sm sm:text-base font-medium disabled:opacity-60"
+              {/* WhatsApp Field */}
+              <div className="flex flex-col gap-2 mt-4">
+                <Label
+                  htmlFor="newsletter-phone"
+                  className="font-semibold text-primary text-sm sm:text-base tracking-wide"
                 >
-                  {loading ? "Subscribing…" : "Subscribe"}
-                </button>
+                  Stay in touch on WhatsApp
+                </Label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    id="newsletter-phone"
+                    type="tel"
+                    inputMode="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. +91 98XXX XXX89"
+                    className="w-full sm:flex-1 rounded-lg border border-primary/30 bg-white/80 px-4 py-3 text-sm sm:text-base outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-primary/50"
+                    autoComplete="tel"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-white text-sm sm:text-base font-medium transition hover:bg-primary/90 disabled:opacity-60"
+                  >
+                    {loading ? "Subscribing…" : "Subscribe"}
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* Consents */}
-            <div className="mt-3 flex flex-col sm:flex-row gap-4">
+            <div className="mt-4 flex flex-col sm:flex-row gap-4">
               <div className="flex items-start gap-2">
                 <input
                   id="consent"
@@ -157,7 +170,9 @@ export default function NewsLetter({ className = "" }) {
                 />
                 <label htmlFor="consent" className="text-xs sm:text-sm text-primary montserrat-500">
                   I agree to receive marketing emails from Delan. Read our{" "}
-                  <a href="/privacy-policy" className="underline underline-offset-2">Privacy Policy</a>.
+                  <a href="/privacy-policy" className="underline underline-offset-2">
+                    Privacy Policy
+                  </a>.
                 </label>
               </div>
 

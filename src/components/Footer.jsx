@@ -11,7 +11,7 @@ const Footer = () => {
   return (
     <footer className="bg-accent text-primary">
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Logo & Tagline */}
         <div className="flex flex-col space-y-4 md:col-span-1">
 

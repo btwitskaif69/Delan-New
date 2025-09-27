@@ -89,7 +89,7 @@ export default function InteractiveModelSection({ nextSectionRef }) {
         <motion.div
           className="pointer-events-none absolute left-1/2 top-[5%] z-30 w-[92%] max-w-4xl -translate-x-1/2 text-center text-primary"
         >
-          <h2 className="font-primary cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl font-bold">
+          <h2 className="cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl font-bold">
             Why Delan Feels Like You
           </h2>
           <p className="montserrat-500 text-sm md:text-lg">

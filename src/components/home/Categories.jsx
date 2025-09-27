@@ -51,7 +51,7 @@ export default function Categories() {
   const nextNextIndex = (activeIndex + 2) % categories.length;
 
   return (
-    <section id="categories-section" className="bg-white px-[5%] py-12">
+    <section id="categories-section" className="bg-white px-[5%] py-8">
       <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-6">
         Our Curated Collection
       </h2>

@@ -89,7 +89,7 @@ export default function PrBanner() {
   };
 
   return (
-    <div className="w-full bg-muted/30 overflow-hidden">
+    <div className="w-full bg-muted/30 overflow-hidden py-4">
       <div className="max-w-8xl mx-auto">
 
         {/* Customer Stats + Stars */}

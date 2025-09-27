@@ -166,7 +166,7 @@ export default function WatchAndBuy() {
   const isExternal = (href) => /^https?:\/\//i.test(href);
 
   return (
-    <section className="bg-white px-5 py-10 sm:px-[5%]">
+    <section className="bg-white px-5 py-4 sm:px-[5%]">
       <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
         Discover Your Look
       </h2>

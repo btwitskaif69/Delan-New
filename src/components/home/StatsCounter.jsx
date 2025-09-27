@@ -58,7 +58,7 @@ export default function StatsCounter() {
     const count = useCountUp(target, visible);
     return (
       <Card className="w-full bg-card-none shadow-none border-none">
-        <CardContent className="px-6 py-6 text-center">
+        <CardContent className="px-6 py-4 text-center">
           <h3
             className="montserrat-600 text-5xl md:text-5xl font-medium text-primary leading-none"
             aria-live="polite"
@@ -77,7 +77,7 @@ export default function StatsCounter() {
   return (
     <section>
       {/* Intro */}
-      <div className="mx-auto max-w-[960px] px-4 pt-12 text-center text-primary">
+      <div className="mx-auto max-w-[960px] px-4 text-center text-primary">
         <h1 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           The Delan Essence
         </h1>
@@ -89,7 +89,7 @@ export default function StatsCounter() {
       </div>
 
       {/* Stats */}
-      <div className="px-4 pb-20 pt-10">
+      <div className="px-4 py-4">
         <div
           ref={ref}
           className="

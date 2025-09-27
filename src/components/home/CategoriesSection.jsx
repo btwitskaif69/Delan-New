@@ -27,7 +27,7 @@ const categories = [...baseCategories, ...baseCategories];
 
 export default function CategoriesSection() {
   return (
-    <section className="w-full px-4 md:px-8 lg:px-12 py-12">
+    <section className="w-full px-4 md:px-8 lg:px-12 py-4">
       <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
         Browse by Style
       </h2>

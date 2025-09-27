@@ -92,7 +92,7 @@ export default function TopProducts({
 
     if (loading) {
       return (
-        <section className="bg-white px-[5%] py-10 text-center">
+        <section className="bg-white px-[5%] pt-4 pb-8 text-center">
           <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
@@ -116,7 +116,7 @@ export default function TopProducts({
 
     if (error) {
       return (
-        <section className="bg-white px-[5%] py-12 text-center">
+        <section className="bg-white px-[5%] pt-4 pb-8 text-center">
           <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
@@ -127,7 +127,7 @@ export default function TopProducts({
 
     if (collections.length === 0) {
       return (
-        <section className="bg-white px-[5%] py-12 text-center">
+        <section className="bg-white px-[5%] pt-4 pb-8 text-center">
           <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
             {title}
           </h2>
@@ -137,7 +137,7 @@ export default function TopProducts({
     }
 
     return (
-      <section className="bg-white px-[5%] py-12 text-center">
+      <section className="bg-white px-[5%] pt-4 pb-8 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
@@ -169,7 +169,7 @@ export default function TopProducts({
                   </AspectRatio>
                   <div className="px-1 pt-3">
                     <h3
-                      className="montserrat-500 text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
+                      className="montserrat-500 text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate text-center"
                       title={c.title}
                       style={{ height: "calc(1em * 1.35)" }}
                     >
@@ -272,7 +272,7 @@ export default function TopProducts({
   // Loading / Error
   if (loading) {
     return (
-      <section className="bg-white px-[5%] py-10 text-center">
+      <section className="bg-white px-[5%] pt-4 pb-8 text-center">
         <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           {title}
         </h2>
@@ -322,7 +322,7 @@ export default function TopProducts({
   }
 
   return (
-    <section className="bg-white px-[5%] py-12 text-center">
+    <section className="bg-white px-[5%] py-4 text-center">
       <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
         {title}
       </h2>

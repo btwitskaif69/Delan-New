@@ -158,7 +158,7 @@ export default function OfferSection() {
   /* Loading / Error states */
   if (loading) {
     return (
-      <section id="offers-section" className="bg-white px-[5%] py-10 text-center">
+      <section id="offers-section" className="bg-white px-[5%] py-4 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           Offers & Sale
         </h2>
@@ -191,7 +191,7 @@ export default function OfferSection() {
 
   if (error) {
     return (
-      <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
+      <section id="offers-section" className="bg-white px-[5%] py-4 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           Offers & Sale
         </h2>
@@ -204,7 +204,7 @@ export default function OfferSection() {
 
   if (!discountedProducts.length) {
     return (
-      <section id="offers-section" className="bg-white px-[5%] py-12 text-center">
+      <section id="offers-section" className="bg-white px-[5%] py-4 text-center">
         <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-2">
           Offers & Sale
         </h2>

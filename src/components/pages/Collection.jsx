@@ -14,6 +14,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { ShoppingBag } from "lucide-react";
+import Delivery from "@/assets/icons/7days.svg";
 
 // ✅ Queries
 import { CART_CREATE, CART_LINES_ADD } from "@/lib/queries";
@@ -36,7 +38,7 @@ const GET_COLLECTION_BY_HANDLE = `
             id
             title
             handle
-            images(first: 1) {
+            images(first: 2) {
               edges {
                 node {
                   url
@@ -94,6 +96,7 @@ function Price({ amount, code }) {
 function parseProducts(collectionData) {
   const edges = collectionData?.products?.edges ?? [];
   return edges.map(({ node }) => {
+    // rating parsing (supports number or JSON { value })
     let ratingValue = 0;
     const ratingField = node?.metafield?.value;
     if (ratingField) {
@@ -106,8 +109,16 @@ function parseProducts(collectionData) {
       }
     }
 
-    const img = node?.images?.edges?.[0]?.node;
+    // images (take first & second)
+    const imgs = node?.images?.edges ?? [];
+    const img1 = imgs[0]?.node;
+    const img2 = imgs[1]?.node;
+
     const firstVariant = node?.variants?.edges?.[0]?.node;
+
+    // Avoid duplicating same URL as hover image
+    const img1Url = img1?.url || "https://via.placeholder.com/600x800";
+    const img2Url = img2?.url && img2?.url !== img1?.url ? img2.url : null;
 
     return {
       id: node.id,
@@ -115,8 +126,10 @@ function parseProducts(collectionData) {
       handle: node.handle,
       price: node.priceRange?.minVariantPrice?.amount,
       currency: node.priceRange?.minVariantPrice?.currencyCode,
-      imageUrl: img?.url || "https://via.placeholder.com/600x800",
-      altText: img?.altText || node.title,
+      imageUrl: img1Url,
+      altText: img1?.altText || node.title,
+      secondImageUrl: img2Url,
+      secondAltText: img2?.altText || img1?.altText || node.title,
       ratingValue: Math.max(0, Math.min(5, Math.round(ratingValue))),
       variantId: firstVariant?.id || null,
       available: !!firstVariant?.availableForSale,
@@ -172,8 +185,7 @@ export default function CollectionPage() {
           setRawProducts(parseProducts(col));
         }
       } catch (e) {
-        if (!cancelled)
-          setError(e?.message || "Failed to load collection.");
+        if (!cancelled) setError(e?.message || "Failed to load collection.");
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -305,8 +317,8 @@ export default function CollectionPage() {
       {/* Header with sorting */}
       <div className="mx-auto max-w-7xl px-4 md:px-8 py-10">
         <h1 className="cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
-            {title}
-          </h1>
+          {title}
+        </h1>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <p className="mt-1 text-sm text-neutral-500 text-center sm:text-left">
             {products.length} item{products.length === 1 ? "" : "s"}
@@ -336,80 +348,106 @@ export default function CollectionPage() {
             No products in this collection.
           </div>
         ) : (
-          <div className="mt-8 grid gap-7 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-            {products.map((product) => {
-              const busy = !!adding[product.id];
-              return (
-                <Card
-                  key={product.id}
-                  className="border-0 shadow-none text-center group"
-                >
-                  <Link
-                    to={`/products/${product.handle}`}
-                    aria-label={product.title}
-                    className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-                    style={{ ["--tw-ring-color"]: BRAND }}
-                  >
-                    <CardContent className="p-0">
-                      <div className="relative">
-                        <AspectRatio
-                          ratio={3 / 4}
-                          className="rounded-2xl overflow-hidden bg-rose-50"
-                        >
-                          <img
-                            src={product.imageUrl}
-                            alt={product.altText}
-                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] select-none"
-                            draggable="false"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </AspectRatio>
-                      </div>
-
-                      <div className="px-1 pt-3 flex flex-col justify-center items-center gap-1.5">
-                        <h3
-                          className="text-center w-full font-secondary text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
-                          style={{ height: "calc(1em * 1.35)" }}
-                          title={product.title}
-                        >
-                          {product.title}
-                        </h3>
-
-                        <Price amount={product.price} code={product.currency} />
-
-                        {product.ratingValue > 0 ? (
-                          <Stars value={product.ratingValue} />
-                        ) : (
-                          <div className="h-5" aria-hidden="true" />
-                        )}
-
-                        <div className="w-full mt-1.5 flex justify-center items-center">
-                          <Button
-                            className="font-secondary font-semibold border-2"
-                            style={{ backgroundColor: BRAND, borderColor: BRAND }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              if (!product.available || busy) return;
-                              handleAddToCart(product);
-                            }}
-                            disabled={!product.available || busy}
-                          >
-                            {!product.available
-                              ? "Out of stock"
-                              : busy
-                              ? "Adding..."
-                              : "Add to Cart"}
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Link>
-                </Card>
-              );
-            })}
+              <div className="mt-8 grid gap-7 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+                {products.map((product) => {
+                  const busy = !!adding[product.id];
+                  return (
+                    <Card key={product.id} className="border-0 shadow-none text-center group">
+  <Link
+    to={`/products/${product.handle}`}
+    aria-label={product.title}
+    className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+    style={{ ["--tw-ring-color"]: BRAND }}
+  >
+    <CardContent className="p-0">
+      <div className="relative">
+        <AspectRatio ratio={3 / 4} className="rounded-2xl overflow-hidden bg-rose-50">
+          <div className="relative h-full w-full transition-transform duration-300">
+            <img
+              src={product.imageUrl}
+              alt={product.altText}
+              className="absolute inset-0 h-full w-full object-cover select-none transition-opacity duration-300 group-hover:opacity-0"
+              draggable="false"
+              loading="lazy"
+              decoding="async"
+            />
+            {/* Hover image if available */}
+            {product.secondImageUrl && (
+              <img
+                src={product.secondImageUrl}
+                alt={product.secondAltText}
+                className="absolute inset-0 h-full w-full object-cover select-none opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                draggable="false"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
           </div>
+        </AspectRatio>
+      </div>
+
+      <div className="px-1 pt-3 flex flex-col justify-center items-center gap-1.5">
+        <h3
+          className="text-center w-full font-secondary text-[1.1rem] font-semibold text-[color:var(--brand-642,#642c44)] leading-[1.35] truncate"
+          style={{ height: "calc(1em * 1.35)" }}
+          title={product.title}
+        >
+          {product.title}
+        </h3>
+
+        <Price amount={product.price} code={product.currency} />
+
+        {product.ratingValue > 0 ? (
+          <Stars value={product.ratingValue} />
+        ) : (
+          <div className="h-5" aria-hidden="true" />
+        )}
+
+        <div className="w-full mt-1.5 flex justify-center items-center gap-3">
+          {/* Buy Now Button */}
+          <Button
+            className="font-secondary font-semibold border-2 px-4"
+            style={{ backgroundColor: BRAND, borderColor: BRAND }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!product.available) return;
+              window.location.href = `/checkout?product=${product.id}`;
+            }}
+            disabled={!product.available}
+          >
+            {product.available ? "Buy Now" : "Out of stock"}
+          </Button>
+
+          {/* Add to Cart Button with Icon */}
+<Button
+  className="font-secondary font-semibold border-2 flex justify-center items-center"
+  style={{ backgroundColor: BRAND, borderColor: BRAND }}
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!product.available || busy) return;
+    handleAddToCart(product);
+  }}
+  disabled={!product.available || busy}
+>
+  {busy ? (
+    "Adding..."
+  ) : (
+    <ShoppingBag />
+  )}
+</Button>
+
+        </div>
+      </div>
+    </CardContent>
+  </Link>
+</Card>
+
+
+                  );
+                })}
+              </div>
         )}
       </div>
     </div>

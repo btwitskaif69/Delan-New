@@ -196,7 +196,7 @@ export default function UspShowcase() {
                   i === activeIndex ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
                 ].join(" ")}
               >
-                <h3 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-4 whitespace-normal">
+                <h3 className="cormorant-garamond-700 text-primary text-2xl md:text-3xl lg:text-4xl mb-4 whitespace-normal">
                   {usp.title}
                 </h3>
                 <p className="montserrat-500 text-base lg:text-lg text-primary mb-5 leading-7 lg:leading-8">

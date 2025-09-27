@@ -28,7 +28,7 @@ const LogoSet = ({ ariaHidden = false }) => (
         <img
           src={mp.logo}
           alt={mp.alt}
-          className="max-h-10 w-auto object-contain"
+          className="max-h-15 w-auto object-contain"
           loading="lazy"
         />
       </li>
@@ -48,7 +48,7 @@ const AvailBanner = () => {
       </div>
 
       {/* Marquee */}
-      <div className="relative group overflow-hidden">
+      <div className="relative group overflow-hidden bg-secondary py-5">
         {/* Edge fades */}
         <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />

@@ -176,7 +176,7 @@ export default function SuggestionSection({
 
   return (
     <section className="bg-white px-[5%] py-12 text-center">
-      <h2 className="cormorant-garamond-700 text-primary text-3xl md:text-4xl lg:text-5xl mb-8">
+      <h2 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl mb-4">
         {title}
       </h2>
 

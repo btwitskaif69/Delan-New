@@ -77,16 +77,18 @@ export const GET_PRODUCT_BY_HANDLE = `
 `;
 
 
-export const GET_COLLECTIONS = /* GraphQL */ `
-  query getCollections($first: Int!) {
+export const GET_COLLECTIONS = `
+  query GetCollections($first: Int!) {
     collections(first: $first) {
       edges {
         node {
           id
           handle
           title
-          description
-          image { src altText }
+          image {
+            url
+            altText
+          }
         }
       }
     }
@@ -214,23 +216,18 @@ export const GET_COLLECTION_PRODUCTS = /* GraphQL */ `
 `;
 
 // ✅ use plain string, not gql
-export const GET_TOP_PRODUCTS = /* GraphQL */ `
-  query getTopProducts($handle: String!) {
+export const GET_TOP_PRODUCTS = `
+  query GetTopProducts($handle: String!) {
     collection(handle: $handle) {
+      id
       title
-      products(first: 8) {
+      products(first: 20) {
         edges {
           node {
             id
             title
             handle
-            priceRange {
-              minVariantPrice {
-                amount
-                currencyCode
-              }
-            }
-            images(first: 1) {
+            images(first: 2) {
               edges {
                 node {
                   url
@@ -238,8 +235,11 @@ export const GET_TOP_PRODUCTS = /* GraphQL */ `
                 }
               }
             }
-            rating: metafield(namespace: "reviews", key: "rating") {
-              value
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
             }
             variants(first: 1) {
               edges {
@@ -248,6 +248,9 @@ export const GET_TOP_PRODUCTS = /* GraphQL */ `
                   availableForSale
                 }
               }
+            }
+            rating: metafield(namespace: "reviews", key: "rating") {
+              value
             }
           }
         }

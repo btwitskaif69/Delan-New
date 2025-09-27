@@ -10,7 +10,7 @@ import "./font.css";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ScrollToTop />
+      <ScrollToTop behavior="smooth" restoreBehavior="auto" offset={80} />
       <App />
     </BrowserRouter>
   </StrictMode>

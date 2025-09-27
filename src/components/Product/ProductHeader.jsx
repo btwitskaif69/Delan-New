@@ -484,6 +484,7 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
             </div>
 
             <div className="h-px w-full bg-border" />
+            
 
             {/* Options */}
             <div className="space-y-4 sm:space-y-5">
@@ -494,8 +495,10 @@ export default function ProductHeader({ handle: handleProp, onAddToCart }) {
                     <span className="normal-case text-foreground">
                       {selectedOptions[opt.name]}
                     </span>
+                    
+                <Button>Size Chart</Button>
                   </div>
-
+                
                   <div className="flex flex-wrap gap-2 sm:gap-2.5">
                     {opt.values.map((val) => {
                       const active = selectedOptions[opt.name] === val;

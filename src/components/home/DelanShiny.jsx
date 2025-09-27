@@ -20,7 +20,7 @@ const DelanShiny = () => {
         <img
           src={logo}
           alt="DELAN brand logo"
-          className="w-40 h-auto mx-auto block"
+          className="w-105 h-auto mx-auto block"
         />
 
         <ShinyText

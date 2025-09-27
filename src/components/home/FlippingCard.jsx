@@ -17,7 +17,7 @@ export default function FlippingCard() {
   return (
     <section className="px-[5%] py-12">
       <div
-        className="mx-auto max-w-6xl"
+        className="mx-auto max-w-8xl"
         role="button"
         tabIndex={0}
         aria-pressed={flipped ? "true" : "false"}
@@ -27,7 +27,7 @@ export default function FlippingCard() {
       >
         <div className="relative w-full [perspective:1200px]">
           <div
-            className={`relative h-[420px] md:h-[550px] w-full rounded-2xl shadow-xl transition-transform duration-700 ease-out [transform-style:preserve-3d] ${
+            className={`relative h-[420px] md:h-[700px] w-full rounded-2xl shadow-xl transition-transform duration-900 ease-out [transform-style:preserve-3d] ${
               flipped ? "[transform:rotateY(180deg)]" : ""
             }`}
           >

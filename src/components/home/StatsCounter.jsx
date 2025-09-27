@@ -81,7 +81,7 @@ export default function StatsCounter() {
         <h1 className="text-center cormorant-garamond-700 uppercase text-primary text-3xl md:text-4xl lg:text-4xl">
           The Delan Essence
         </h1>
-        <p className="montserrat-500 mx-auto mt-3 max-w-[68ch] text-[clamp(0.95rem,1.2vw,1.05rem)] leading-relaxed text-primary">
+        <p className="montserrat-500 mx-auto mt-3 max-w-[60ch] text-[clamp(0.95rem,1.2vw,1.05rem)] leading-relaxed text-primary">
           From timeless co-ord sets to empowering silhouettes, we’ve reimagined what modern fashion means for women.
           Across India, women aren’t just wearing Delan—they’re expressing confidence, embracing individuality, and
           shaping their own stories with every outfit.
@@ -93,7 +93,7 @@ export default function StatsCounter() {
         <div
           ref={ref}
           className="
-            mx-auto max-w-[900px]
+            mx-auto max-w-[700px]
             flex flex-col md:flex-row items-stretch justify-center
             gap-6 md:gap-0
             divide-y md:divide-y-0 md:divide-x divide-[rgba(100,44,68,0.2)]

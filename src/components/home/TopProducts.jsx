@@ -1,3 +1,4 @@
+// TopProducts.jsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { shopify } from "@/lib/shopify";
 import { Link } from "react-router-dom";
@@ -5,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ShoppingBag } from "lucide-react";
 import {
   GET_TOP_PRODUCTS,
   GET_COLLECTIONS,
@@ -196,7 +198,11 @@ export default function TopProducts({
         } catch {}
       }
       const img = node.images?.edges?.[0]?.node;
+      const img2 = node.images?.edges?.[1]?.node;
       const variant = node.variants?.edges?.[0]?.node;
+
+      const img1Url = img?.url ?? "https://via.placeholder.com/600x800";
+      const img2Url = img2?.url && img2?.url !== img?.url ? img2.url : null;
 
       return {
         id: node.id,
@@ -204,8 +210,10 @@ export default function TopProducts({
         handle: node.handle,
         price: node.priceRange?.minVariantPrice?.amount,
         currency: node.priceRange?.minVariantPrice?.currencyCode,
-        imageUrl: img?.url ?? "https://via.placeholder.com/600x800",
+        imageUrl: img1Url,
         altText: img?.altText || node.title,
+        secondImageUrl: img2Url,
+        secondAltText: img2?.altText || img?.altText || node.title,
         ratingValue,
         variantId: variant?.id ?? null,
         available: !!variant?.availableForSale,
@@ -246,6 +254,12 @@ export default function TopProducts({
 
         setCartBusy((b) => ({ ...b, [product.id]: "added" }));
         setTimeout(() => setCartBusy((b) => ({ ...b, [product.id]: false })), 1000);
+
+        // Dispatch cart update event (if other parts of app listen)
+        try {
+          const total = 1;
+          window.dispatchEvent(new CustomEvent("cart:updated", { detail: { totalQuantity: total } }));
+        } catch {}
       } catch (e) {
         console.error(e);
         setCartBusy((b) => ({ ...b, [product.id]: false }));
@@ -330,18 +344,26 @@ export default function TopProducts({
                 <CardContent className="p-0">
                   <div className="relative">
                     <AspectRatio ratio={3 / 4} className="rounded-2xl overflow-hidden bg-rose-50">
-                      <img
-                        src={product.imageUrl}
-                        alt={product.altText}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] select-none"
-                        draggable="false"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <div className="absolute inset-x-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="bg-black/50 text-white text-center py-2 montserrat-500 font-semibold">
-                          QUICK VIEW
-                        </div>
+                      <div className="relative h-full w-full transition-transform duration-300">
+                        <img
+                          src={product.imageUrl}
+                          alt={product.altText}
+                          className="absolute inset-0 h-full w-full object-cover select-none transition-opacity duration-300 group-hover:opacity-0"
+                          draggable="false"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        {/* Hover image if available */}
+                        {product.secondImageUrl && (
+                          <img
+                            src={product.secondImageUrl}
+                            alt={product.secondAltText}
+                            className="absolute inset-0 h-full w-full object-cover select-none opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                            draggable="false"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        )}
                       </div>
                     </AspectRatio>
                   </div>
@@ -363,9 +385,27 @@ export default function TopProducts({
                       <div className="h-5" aria-hidden="true" />
                     )}
 
-                    <div className="w-full mt-1.5 flex justify-center items-center">
+                    <div className="w-full mt-1.5 flex justify-center items-center gap-3">
+                      {/* Buy Now Button */}
                       <Button
-                        className="montserrat-500 font-semibold border-2"
+                        className="montserrat-500 font-semibold border-2 px-4"
+                        style={{ backgroundColor: BRAND, borderColor: BRAND }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (!product.available) return;
+                          // Simple buy-now behaviour (redirect to checkout with product id)
+                          window.location.href = `/checkout?product=${product.id}`;
+                        }}
+                        disabled={!product.available}
+                        aria-disabled={!product.available}
+                      >
+                        {product.available ? "Buy Now" : "Out of stock"}
+                      </Button>
+
+                      {/* Add to Cart Button with Icon */}
+                      <Button
+                        className="montserrat-500 font-semibold border-2 flex justify-center items-center"
                         style={{ backgroundColor: BRAND, borderColor: BRAND }}
                         onClick={(e) => {
                           e.preventDefault();
@@ -375,16 +415,14 @@ export default function TopProducts({
                         }}
                         disabled={!product.available || isBusy}
                         aria-disabled={!product.available || isBusy}
-                        onMouseEnter={(e) => (e.currentTarget.style.boxShadow = `0 8px 20px rgba(100,44,68,0.30)`)}
-                        onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
                       >
-                        {!product.available
-                          ? "Out of stock"
-                          : isBusy
-                          ? "Adding..."
-                          : justAdded
-                          ? "Added!"
-                          : "Add to Cart"}
+                        {isBusy ? (
+                          "Adding..."
+                        ) : justAdded ? (
+                          "Added!"
+                        ) : (
+                          <ShoppingBag />
+                        )}
                       </Button>
                     </div>
                   </div>

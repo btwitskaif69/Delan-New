@@ -89,8 +89,8 @@ export default function PrBanner() {
   };
 
   return (
-    <div className="w-full bg-muted/30 py-8 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <div className="w-full bg-muted/30 overflow-hidden">
+      <div className="max-w-8xl mx-auto">
 
         {/* Customer Stats + Stars */}
         <div
@@ -115,7 +115,7 @@ export default function PrBanner() {
                   <span
                     className="absolute left-0 top-0 h-full overflow-hidden pointer-events-none z-10 star-fill-animation"
                     style={{
-                      animationDelay: `${i * 200}ms`,
+                      animationDelay: `${i * 100}ms`,
                       willChange: "width",
                       transform: "translateZ(0)",
                     }}
@@ -133,10 +133,8 @@ export default function PrBanner() {
         </div>
 
         {/* Marquee */}
-        <div className="relative group overflow-hidden">
+        <div className="relative group overflow-hidden bg-accent py-5">
           {/* Edge fades */}
-          <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-background to-transparent" />
-          <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-background to-transparent" />
 
           {/* Track: exactly 200% width, two identical halves */}
           <div
